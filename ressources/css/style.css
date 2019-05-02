@@ -1,5 +1,18 @@
-﻿.outline.title .text {
-    -fx-fill: lightseagreen;
-    -fx-stroke: firebrick;
-    -fx-stroke-width: 2px;
+﻿.label {
+	-fx-text-fill: #FFFFFF; 
+}
+.text {
+	-fx-effect: dropshadow( gaussian , rgba(255,255,255,1) , 3,3,0,0 );
+}
+#unJoueur {
+	-fx-text-fill: orange; 
+}
+#deuxJoueurs {
+	-fx-text-fill: blue; 
+}
+#classement {
+	-fx-text-fill: red; 
+}
+#quitter {
+	-fx-text-fill: black; 
 }

@@ -12,7 +12,7 @@ import javafx.animation.SequentialTransition;
 import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.concurrent.Task;
+import javafx.beans.property.IntegerProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -22,11 +22,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -37,15 +40,18 @@ public class MenuGUI extends Application {
 
 	public static void main(String[] args) { launch(); };
 	
-	private ImageView chasseur, monstre, back;
+	private ImageView chasseur, monstre, back, speaker_on, speaker_off;
 	private final int WIDTH = 640, HEIGHT = 480;
 	private StackPane background, root;
 	private Pane p1, p2;
 	private VBox toutTitre;
 	private Label unJoueur, deuxJoueurs, quitter, classement, selection;
+	private int actualSelection = -1;
 	private Font titre, sub;
 	private Canvas cv;
 	private GraphicsContext gc;
+	private float volume = 0.1f;
+	private MediaPlayer mp;
 	
 	public void start(Stage stage) throws FileNotFoundException {
 		root = new StackPane();
@@ -58,9 +64,32 @@ public class MenuGUI extends Application {
 		loadImage();
 		setupLabel();
 		setupTransition();
-		root.getChildren().addAll(background, cv, p1, p2, toutTitre);
+		
+		StackPane.setAlignment(speaker_on, Pos.TOP_LEFT);
+		StackPane.setAlignment(speaker_off, Pos.TOP_LEFT);
+		
+		root.getChildren().addAll(background,cv, p1, p2, toutTitre, speaker_on, speaker_off);
 		
 		Scene scene = new Scene(root, 640, 480);
+		scene.setOnKeyPressed(e -> {
+			if(actualSelection != -1) {
+				KeyCode k = e.getCode();
+				if(k.equals(KeyCode.ENTER)) {
+					if(selection == quitter) {
+						quit();
+					}
+				} else if(k.equals(KeyCode.UP)) {
+					actualSelection--;
+					if(actualSelection < 0) actualSelection = 3;
+					changeSelection(actualSelection);
+				} else if(k.equals(KeyCode.DOWN)) {
+					actualSelection++;
+					if(actualSelection > 3) actualSelection = 0;
+					changeSelection(actualSelection);
+				}
+			}
+		});
+		scene.getStylesheets().add(new File("ressources/css/style.css").toURI().toString());
 		stage.setScene(scene);
 		stage.setTitle("Chasse Aux Monstres");
 		stage.setResizable(false);
@@ -97,6 +126,21 @@ public class MenuGUI extends Application {
 		back = new ImageView(new Image("file:ressources/img/back.png",WIDTH + 50,HEIGHT + 50,true,true));
 		chasseur = new ImageView(new Image("file:ressources/img/chasseur.png",100*3,70*3,true,true));
 		monstre = new ImageView(new Image("file:ressources/img/monstre.png",100*3,70*3,true,true));
+		speaker_on = new ImageView(new Image("file:ressources/img/speaker_on.png",40,40,true,true));
+		speaker_off = new ImageView(new Image("file:ressources/img/speaker_off.png",40,40,true,true));
+		speaker_off.setVisible(false);
+		
+		speaker_on.setOnMouseClicked(e -> {
+			speaker_on.setVisible(false);
+			speaker_off.setVisible(true);
+			mp.setVolume(0);
+		});
+		
+		speaker_off.setOnMouseClicked(e -> {
+			speaker_on.setVisible(true);
+			speaker_off.setVisible(false);
+			mp.setVolume(volume);
+		});
 	}
 	
 	private void setupTransition() {
@@ -171,22 +215,13 @@ public class MenuGUI extends Application {
 	}
 	
 	private void playMusic() {
-		final Task task = new Task() {
-
-	        @Override
-	        protected Object call() throws Exception {
-	            AudioClip audio = new AudioClip(getClass().getResource("music.wav").toExternalForm());
-	            audio.setVolume(0.1f);
-	            audio.setCycleCount(AudioClip.INDEFINITE);
-	            audio.play();
-	            return null;
-	        }
-	    };
-	    Thread thread = new Thread(task);
-	    thread.start();
+		Media me = new Media(new File("ressources/audio/music.wav").toURI().toString());
+		mp = new MediaPlayer(me);
+		mp.setVolume(volume);
+		mp.play();
+		mp.setCycleCount(MediaPlayer.INDEFINITE);
 	}
 	
-	@SuppressWarnings("restriction")
 	private void setupLabel() {
 		toutTitre = new VBox();
 		
@@ -198,61 +233,55 @@ public class MenuGUI extends Application {
 		titre1.setFont(titre);
 		titre2.setFont(titre);
 		titre3.setFont(titre);
-		titre1.setStyle("-fx-text-fill: white; -fx-effect: dropshadow( gaussian , rgba(0,0,0,1) , 3,3,0,0 );");
+		/*titre1.setStyle("-fx-text-fill: white; -fx-effect: dropshadow( gaussian , rgba(0,0,0,1) , 3,3,0,0 );");
 		titre2.setStyle("-fx-text-fill: white; -fx-effect: dropshadow( gaussian , rgba(0,0,0,1) , 3,3,0,0 );");
-		titre3.setStyle("-fx-text-fill: white; -fx-effect: dropshadow( gaussian , rgba(0,0,0,1) , 3,3,0,0 );");
+		titre3.setStyle("-fx-text-fill: white; -fx-effect: dropshadow( gaussian , rgba(0,0,0,1) , 3,3,0,0 );");*/
 		vTitre.getChildren().addAll(titre1,titre2,titre3);
 		
 		unJoueur = new Label("1 JOUEUR");
 		unJoueur.setFont(sub);
-		unJoueur.setStyle("-fx-text-fill: orange; -fx-effect: dropshadow( gaussian , rgba(255,255,255,1) , 3,3,0,0 );");
+		unJoueur.setId("unJoueur");
+		//unJoueur.setStyle("-fx-text-fill: orange; -fx-effect: dropshadow( gaussian , rgba(255,255,255,1) , 3,3,0,0 );");
 		
 		deuxJoueurs = new Label("2 JOUEURS");
 		deuxJoueurs.setFont(sub);
-		deuxJoueurs.setStyle("-fx-text-fill: blue; -fx-effect: dropshadow( gaussian , rgba(255,255,255,1) , 3,3,0,0 );");
+		deuxJoueurs.setId("deuxJoueurs");
+		//deuxJoueurs.setStyle("-fx-text-fill: blue; -fx-effect: dropshadow( gaussian , rgba(255,255,255,1) , 3,3,0,0 );");
 		
 		classement = new Label("CLASSEMENT");
 		classement.setFont(sub);
-		classement.setStyle("-fx-text-fill: red; -fx-effect: dropshadow( gaussian , rgba(255,255,255,1) , 3,3,0,0 );");
+		classement.setId("classement");
+		//classement.setStyle("-fx-text-fill: red; -fx-effect: dropshadow( gaussian , rgba(255,255,255,1) , 3,3,0,0 );");
 		
 		quitter = new Label("QUITTER");
 		quitter.setFont(sub);
-		quitter.setStyle("-fx-text-fill: black; -fx-effect: dropshadow( gaussian , rgba(255,255,255,1) , 3,3,0,0 );");
+		quitter.setId("quitter");
+		//quitter.setStyle("-fx-text-fill: black; -fx-effect: dropshadow( gaussian , rgba(255,255,255,1) , 3,3,0,0 );");
 		
 		toutTitre.getChildren().addAll(vTitre, unJoueur, deuxJoueurs, classement, quitter);
 		toutTitre.setAlignment(Pos.CENTER);
 		toutTitre.setSpacing(35);
-		FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
-		double sizeUn, sizeDeux, sizeClassement ,sizeQuitter;
-		sizeUn = fontLoader.computeStringWidth(unJoueur.getText(), unJoueur.getFont());
-		sizeDeux = fontLoader.computeStringWidth(deuxJoueurs.getText(), deuxJoueurs.getFont());
-		sizeQuitter = fontLoader.computeStringWidth(quitter.getText(), quitter.getFont());
-		sizeClassement = fontLoader.computeStringWidth(classement.getText(), classement.getFont());
 		unJoueur.setOnMouseMoved(e -> {
 			if(selection == null || selection != unJoueur) {
-				drawTriangle(unJoueur.getLayoutX(), unJoueur.getLayoutY(), sizeUn, Color.ORANGE);
-				selection = unJoueur;
+				changeSelection(0);
 			}
 		});
 		
 		deuxJoueurs.setOnMouseMoved(e -> {
 			if(selection == null || selection != deuxJoueurs) {
-				drawTriangle(deuxJoueurs.getLayoutX(), deuxJoueurs.getLayoutY(), sizeDeux, Color.BLUE);
-				selection = deuxJoueurs;
+				changeSelection(1);
 			}
 		});
 		
 		classement.setOnMouseMoved(e -> {
 			if(selection == null || selection != classement) {
-				drawTriangle(classement.getLayoutX(), classement.getLayoutY(), sizeClassement, Color.RED);
-				selection = classement;
+				changeSelection(2);
 			}
 		});
 		
 		quitter.setOnMouseMoved(e -> {
 			if(selection == null || selection != quitter) {
-				drawTriangle(quitter.getLayoutX(), quitter.getLayoutY(), sizeQuitter, Color.BLACK);
-				selection = quitter;
+				changeSelection(3);
 			}
 		});
 	}
@@ -281,5 +310,37 @@ public class MenuGUI extends Application {
 	    gc.fill();
 	    gc.stroke();
 	    gc.closePath();
+	}
+	
+	@SuppressWarnings("restriction")
+	private void changeSelection(int n) throws IndexOutOfBoundsException {
+		FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
+		double sizeUn, sizeDeux, sizeClassement ,sizeQuitter;
+		sizeUn = fontLoader.computeStringWidth(unJoueur.getText(), unJoueur.getFont());
+		sizeDeux = fontLoader.computeStringWidth(deuxJoueurs.getText(), deuxJoueurs.getFont());
+		sizeQuitter = fontLoader.computeStringWidth(quitter.getText(), quitter.getFont());
+		sizeClassement = fontLoader.computeStringWidth(classement.getText(), classement.getFont());
+		
+		switch(n) {
+		case 0: selection = unJoueur;
+			drawTriangle(unJoueur.getLayoutX(), unJoueur.getLayoutY(), sizeUn, Color.ORANGE);
+			actualSelection = 0;
+			break;
+		case 1: selection = deuxJoueurs;
+			drawTriangle(deuxJoueurs.getLayoutX(), deuxJoueurs.getLayoutY(), sizeDeux, Color.BLUE);
+			actualSelection = 1;
+			break;
+		case 2: selection = classement;
+			drawTriangle(classement.getLayoutX(), classement.getLayoutY(), sizeClassement, Color.RED);
+			actualSelection = 2;
+			break;
+		case 3: selection = quitter;
+			drawTriangle(quitter.getLayoutX(), quitter.getLayoutY(), sizeQuitter, Color.BLACK);
+			actualSelection = 3;
+			break;
+		default: 
+			actualSelection = -1;
+			throw new IndexOutOfBoundsException();
+		}
 	}
 }
