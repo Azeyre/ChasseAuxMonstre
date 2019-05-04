@@ -37,7 +37,7 @@ public abstract class Game {
 	protected int size;
 	protected Label nbTours;
 	protected int offsetX, offsetY;
-	protected Label info;
+	protected Label info, infoBas;
 	protected Monstre m;
 	protected Chasseur c;
 	private FadeTransition fade;
@@ -61,7 +61,7 @@ public abstract class Game {
 		root.setAlignment(Pos.TOP_LEFT);
 		
 		canvas = new Canvas(600,600);
-		canvas.setOpacity(0.8);
+		canvas.setOpacity(0.6);
 		gc = canvas.getGraphicsContext2D();
 		
 		info = new Label("Au monstre de jouer !");
@@ -71,10 +71,10 @@ public abstract class Game {
 		upper.setMinSize(WIDTH, 100);
 		upper.setMaxSize(WIDTH, 100);
 		
-		Label b = new Label("BOT");
+		infoBas = new Label();
 		bottom = new StackPane();
 		bottom.setAlignment(Pos.CENTER);
-		bottom.getChildren().add(b);
+		bottom.getChildren().add(infoBas);
 		bottom.setMinSize(WIDTH, 100);
 		bottom.setMaxSize(WIDTH, 100);
 		
@@ -120,8 +120,8 @@ public abstract class Game {
 	protected abstract void loop();
 	
 	protected void moveMonstre(int x, int y) {
-		plateau.setExplorer(m.getX(), m.getY());
 		if(m.move(x, y, plateau)) {
+			plateau.incrPos(m);
 			m.setJouer(false);
 			drawCasePleine();
 			
@@ -152,14 +152,19 @@ public abstract class Game {
 				} else {
 					c.setJouer(true);
 					info.setText("Au chasseur de jouer !");
+					infoBas.setText("");
 					draw();
 				}
 			});
 			pause.play();
-		}
+		} else infoBas.setText("Case explorée ! Impossible d'y aller !");
 	}
 	
 	protected boolean reveal(int x, int y) {
+		int anciennePosition = plateau.getMonstreAnciennePosition(x, y);
+		if(anciennePosition != -1) {
+			infoBas.setText("Le monstre est passé par là il y a : " + anciennePosition + " tours !");
+		} else infoBas.setText("Dommage, rien par ici...");
 		c.setJouer(false);
 		sec = 5;
 		PauseTransition pause = new PauseTransition();
@@ -172,13 +177,28 @@ public abstract class Game {
 				info.setText("" + sec + " secondes !");
 				pause.play();
 			} else {
+				reset();
 				m.setJouer(true);
-				monstre.setOpacity(1.0);
-				info.setText("Au monstre de jouer !");
-				draw();
+				info.setText("Monstre : cliquer pour afficher votre position.");
+				infoBas.setText("");
 			}
 		});
 		pause.play();
 		return plateau.reveal(x, y, m);
+	}
+	
+	protected void draw(int x, int y) {
+		gc.setFill(Color.DARKRED);
+		gc.fillRect(x * taille_case, y * taille_case, taille_case, taille_case);
+	}
+	
+	protected void reset() { 
+		gc.clearRect(0, 0, 600, 600); 
+		gc.setStroke(Color.BLACK);
+		for(int i = 0 ; i < size ; i++) {
+			for(int j = 0 ; j < size ; j++) {
+				gc.strokeRect(i * taille_case, j * taille_case, taille_case, taille_case);
+			}
+		}
 	}
 }

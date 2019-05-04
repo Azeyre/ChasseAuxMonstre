@@ -1,12 +1,10 @@
 package graphics;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 import game.Chasseur;
 import game.Monstre;
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 
@@ -26,14 +24,22 @@ public class DeuxJoueurs extends Game {
 		middle.setOnMouseClicked(e -> {
 			int x = (int) (e.getX() / taille_case);
 			int y = (int) (e.getY() / taille_case);
+			System.out.println("Tape " + x + "   " + y);
 			if(c.peutJouer()) {
 				if(reveal(x,y)) {
 					System.out.println("LE CHASSEUR A GAGNE WOLA");
-				}
+				} 
+				draw(x,y);
+				c.setPosition(x, y);
+			} else if(m.peutJouer()) {
+				monstre.setOpacity(1.0);
+				draw();
+				draw(c.getX(), c.getY());
+				info.setText("Monstre : déplacez vous !");
 			}
 		});
 		scene.setOnKeyPressed(e -> {
-			if(m.peutJouer()) {
+			if(m.peutJouer() && monstre.getOpacity() == 1.0) {
 				KeyCode k = e.getCode();
 				switch(k) {
 					case UP: moveMonstre(0,-1); break;
@@ -49,6 +55,7 @@ public class DeuxJoueurs extends Game {
 	@Override
 	public void loop() {
 		m.setup(size);
+		plateau.incrPos(m);
 		draw();
 		translate = new TranslateTransition();
 		translate.setDuration(Duration.millis(1000));
