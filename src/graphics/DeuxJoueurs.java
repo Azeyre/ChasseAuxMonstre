@@ -43,26 +43,13 @@ public class DeuxJoueurs extends Game {
 				}
 			}
 		});
-		stage.setOnCloseRequest(e -> {t.cancel();});
 		loop();
-		
-		t = new Timer();
-		t.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-						draw();
-					}
-				});
-			}
-		}, 0, 100);
 	}
 
 	@Override
 	public void loop() {
 		m.setup(size);
+		draw();
 		translate = new TranslateTransition();
 		translate.setDuration(Duration.millis(1000));
 		translate.setToX(offsetX + (m.getX() * taille_case));

@@ -152,6 +152,7 @@ public abstract class Game {
 				} else {
 					c.setJouer(true);
 					info.setText("Au chasseur de jouer !");
+					draw();
 				}
 			});
 			pause.play();
@@ -174,6 +175,7 @@ public abstract class Game {
 				m.setJouer(true);
 				monstre.setOpacity(1.0);
 				info.setText("Au monstre de jouer !");
+				draw();
 			}
 		});
 		pause.play();
