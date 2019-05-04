@@ -38,6 +38,22 @@ public class Plateau {
 		}
 	}
 	
+	public Plateau(int size) {
+		this.size = size;
+		System.out.println(size);
+		this.plateau = new char[size][size];
+		this.monstreAnciennePosition = new int[size][size];
+		this.caseExplorer = new boolean[size][size];
+		this.caseExplorerChasseur = new boolean[size][size];
+		for(int i = 0 ; i < size ; i++) {
+			for(int j = 0 ; j < size ; j++) {
+				this.monstreAnciennePosition[i][j] = -1;
+				this.plateau[i][j] = caseVide;
+				this.caseExplorer[i][j] = false;
+			}
+		}
+	}
+	
 	private void incrPos() {
 		for(int i = 0 ; i < size ; i++) {
 			for(int j = 0 ; j < size ; j++) {
@@ -119,6 +135,10 @@ public class Plateau {
 	 */
 	public boolean getCaseExplorer(int x, int y){
 		return caseExplorer[x][y];
+	}
+	
+	public boolean getCaseExplorerChasseur(int x, int y){
+		return caseExplorerChasseur[x][y];
 	}
 	
 	public int getMonstreAnciennePosition(int x, int y) {

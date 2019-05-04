@@ -1,14 +1,22 @@
 package game;
 
+import graphics.Joueur;
+
 /**
  * Classe du Chasseur
  * @author KOZLOV-PC
  *
  */
-public class Chasseur {
+public class Chasseur extends Joueur {
 	
 	private Position lastPos = new Position(-1,-1);
-
+	
+	public Chasseur() {
+		this("");
+	}
+	public Chasseur(String pseudo) {
+		super(pseudo);
+	}
 	/**
 	 * Retourne la position du chasseur
 	 * @return Position
@@ -45,4 +53,9 @@ public class Chasseur {
 	 * @param y int
 	 */
 	public void setPosition(int x, int y) {lastPos.setX(x); lastPos.setY(y);}
+
+	@Override
+	public boolean estMonstre() {
+		return false;
+	}
 }

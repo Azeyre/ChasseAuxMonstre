@@ -1,5 +1,6 @@
 package game;
 
+import graphics.Joueur;
 import menu.Menu;
 
 /**
@@ -8,18 +9,29 @@ import menu.Menu;
  *
  */
 
-public class Monstre {
+public class Monstre extends Joueur {
 	
 	private Position p;
+	private int size;
 	
 	/**
 	 * Genere une position <b><i>alï¿½atoire</i></b> du monstre en fonction de la taille du plateau
 	 * @param size int
 	 */
 	public Monstre() {
-		this.p = new Position((int) (Math.random() * (Menu.SIZE)), (int) (Math.random() * (Menu.SIZE)));
+		super("");
+		this.size = Menu.SIZE;
+		this.p = new Position((int) (Math.random() * (size)), (int) (Math.random() * (size)));
 	}
 	
+	public Monstre(String pseudo) {
+		super(pseudo);
+	}
+	
+	public void setup(int size) {
+		this.size = size;
+		this.p = new Position((int) (Math.random() * (size)), (int) (Math.random() * (size)));
+	}
 	/**
 	 * Retourne la position du joueur 
 	 * @return position Position
@@ -80,10 +92,10 @@ public class Monstre {
 		int xTemp = this.getX() + x;
 		int yTemp = this.getY() + y;
 		
-		if(xTemp < 0) xTemp = Menu.SIZE - 1;
-		if(yTemp < 0) yTemp = Menu.SIZE - 1;
-		if(xTemp >= Menu.SIZE) xTemp = 0;
-		if(yTemp >= Menu.SIZE) yTemp = 0;
+		if(xTemp < 0) xTemp = size - 1;
+		if(yTemp < 0) yTemp = size - 1;
+		if(xTemp >= size) xTemp = 0;
+		if(yTemp >= size) yTemp = 0;
 		
 		if(p.getCaseExplorer(xTemp, yTemp)) {
 			System.out.println("Case déjà explorée !");
@@ -103,13 +115,13 @@ public class Monstre {
 		
 		//X - 1
 		if(this.getX() - 1 < 0) {
-			xTemp = Menu.SIZE - 1;
+			xTemp = size - 1;
 		} else xTemp = this.getX() - 1;
 		if(!p.getCaseExplorer(xTemp, yTemp)) return false;
 		
 		//X + 1
 		xTemp = this.getX();
-		if(this.getX() + 1 >= Menu.SIZE) {
+		if(this.getX() + 1 >= size) {
 			xTemp = 0;
 		} else xTemp = this.getX() + 1;
 		if(!p.getCaseExplorer(xTemp, yTemp)) return false;
@@ -117,18 +129,23 @@ public class Monstre {
 		//Y - 1
 		xTemp = this.getX();
 		if(this.getY() - 1 < 0) {
-			yTemp = Menu.SIZE - 1;
+			yTemp = size - 1;
 		} else yTemp = this.getY() - 1;
 		if(!p.getCaseExplorer(xTemp, yTemp)) return false;
 		
 		//Y + 1
 		xTemp = this.getX();
 		yTemp = this.getY();
-		if(this.getY() + 1 >= Menu.SIZE) {
+		if(this.getY() + 1 >= size) {
 			yTemp = 0;
 		} else yTemp = this.getY() + 1;
 		if(!p.getCaseExplorer(xTemp, yTemp)) return false;
 		
+		return true;
+	}
+
+	@Override
+	public boolean estMonstre() {
 		return true;
 	}
 }
