@@ -14,9 +14,9 @@ public class IAvsIA {
 	
 	public static void main(String[] args) {
 		Menu.SIZE = 10;
-		//Menu.debloquer = true;
-		//Menu.modeBR = true;
-		//Menu.monstreMange = true;
+		Menu.debloquer = true;
+		Menu.modeBR = true;
+		Menu.monstreMange = true;
 		start();
 	}
 	
@@ -32,7 +32,7 @@ public class IAvsIA {
 		BattleRoyale br;
 		//Boucle principale, tant que le chasseur n'a pas trouv� le monstre ou que le monstre n'est plus de case a explor�
 		
-		while (total < 100000) {
+		while (total < 50000) {
 			plateau = new Plateau();
 			monstre = new Monstre();
 			chasseur = new Chasseur();
