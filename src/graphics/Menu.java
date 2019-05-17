@@ -208,7 +208,7 @@ public class Menu extends Application {
 		
 		TranslateTransition t5 = new TranslateTransition();
 		t5.setDuration(Duration.millis(700));
-		t5.setToX(5);
+		t5.setToX(10);
 		t5.setAutoReverse(true);
 		t5.setNode(canvas);
 		t5.setCycleCount(Transition.INDEFINITE);
@@ -329,7 +329,7 @@ public class Menu extends Application {
 	}
 	
 	@SuppressWarnings("restriction")
-	private void changeSelection(int n) throws IndexOutOfBoundsException {
+	private void changeSelection(int n) {
 		FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
 		double sizeUn, sizeDeux, sizeClassement ,sizeQuitter;
 		sizeUn = fontLoader.computeStringWidth(unJoueur.getText(), unJoueur.getFont());
@@ -383,7 +383,7 @@ public class Menu extends Application {
 			t.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					System.out.println("Waiting for creation players");
+					//System.out.println("Waiting for creation players");
 					if(j1 != null && j2 == null && !CreationJoueur.estOuvert()) {
 						//t.cancel();
 						Platform.runLater(new Runnable() {
@@ -418,7 +418,7 @@ public class Menu extends Application {
 			j2 = j;
 			return true;
 		}
-		System.err.println("Il y a déjà 2 joueurs !");
+		System.err.println("Il y a dï¿½jï¿½ 2 joueurs !");
 		return false;
 	}
 	

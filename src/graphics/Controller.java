@@ -13,16 +13,16 @@ public class Controller {
 	private boolean mute = false;
 	
 	public void initialize() {
-		volume = MenuGUI.getVolume() * 100;
-		mute = MenuGUI.getMute();
+		volume = Menu.getVolume() * 100;
+		mute = Menu.getMute();
 		
 		muteCheckBox.setSelected(mute);
 		volumeSlider.setValue(volume);
 		volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-			MenuGUI.setVolume(newValue.doubleValue() / 100);
+			Menu.setVolume(newValue.doubleValue() / 100);
 		});
 		muteCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-			MenuGUI.setMute(newValue);
+			Menu.setMute(newValue);
 		});
     }
 	
@@ -34,8 +34,8 @@ public class Controller {
 	public void cancel() {
 		Stage stage  = (Stage) volumeSlider.getScene().getWindow();
 		stage.close();
-		MenuGUI.setVolume(volume / 100);
-		MenuGUI.setMute(mute);
+		Menu.setVolume(volume / 100);
+		Menu.setMute(mute);
 	}
 
 }

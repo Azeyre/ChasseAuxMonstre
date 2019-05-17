@@ -28,6 +28,7 @@ public class DeuxJoueurs extends Game {
 			if(c.peutJouer()) {
 				if(reveal(x,y)) {
 					System.out.println("LE CHASSEUR A GAGNE WOLA");
+					System.exit(0);
 				} 
 				draw(x,y);
 				c.setPosition(x, y);
@@ -35,7 +36,7 @@ public class DeuxJoueurs extends Game {
 				monstre.setOpacity(1.0);
 				draw();
 				draw(c.getX(), c.getY());
-				info.setText("Monstre : déplacez vous !");
+				info.setText("Monstre : dï¿½placez vous !");
 			}
 		});
 		scene.setOnKeyPressed(e -> {
