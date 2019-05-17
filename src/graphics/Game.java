@@ -1,5 +1,7 @@
 package graphics;
 
+import java.io.File;
+
 import game.Chasseur;
 import game.Monstre;
 import game.Plateau;
@@ -16,6 +18,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -43,6 +47,9 @@ public abstract class Game {
 	private FadeTransition fade;
 	protected TranslateTransition translate;
 	private int sec;
+	private static MediaPlayer mp;
+	private static double volume = 0.5;
+
 	
 	public Game(String title) {
 		this.tours = 1;
@@ -138,6 +145,7 @@ public abstract class Game {
 			fade.setFromValue(1);
 			fade.setToValue(0);
 			fade.play();
+			audioLoup();
 			
 			sec = 5;
 			PauseTransition pause = new PauseTransition();
@@ -157,13 +165,13 @@ public abstract class Game {
 				}
 			});
 			pause.play();
-		} else infoBas.setText("Case explorÈe ! Impossible d'y aller !");
+		} else infoBas.setText("Case explor√©e ! Impossible d'y aller !");
 	}
 	
 	protected boolean reveal(int x, int y) {
 		int anciennePosition = plateau.getMonstreAnciennePosition(x, y);
 		if(anciennePosition != -1) {
-			infoBas.setText("Le monstre est passÈ par l‡ il y a : " + anciennePosition + " tours !");
+			infoBas.setText("Le monstre est pass√© par l√† il y a : " + anciennePosition + " tours !");
 		} else infoBas.setText("Dommage, rien par ici...");
 		c.setJouer(false);
 		sec = 5;
@@ -184,7 +192,33 @@ public abstract class Game {
 			}
 		});
 		pause.play();
+		audioShoot();
 		return plateau.reveal(x, y, m);
+	}
+	
+	private void audioShoot() {
+		Media me = new Media(new File("ressources/audio/shoot.m4a").toURI().toString());
+		mp = new MediaPlayer(me);
+		mp.setVolume(volume);
+		mp.play();
+		mp.setCycleCount(1);
+	}
+	
+	private void audioLoup() {
+		Media me = new Media(new File("ressources/audio/loup.m4a").toURI().toString());
+		mp = new MediaPlayer(me);
+		mp.setVolume(volume);
+		mp.play();
+		mp.setCycleCount(1);
+	}
+	
+	public static void setVolume(double v) {
+		volume = v;
+		mp.setVolume(volume);
+	}
+	
+	public static double getVolume() {
+		return mp.getVolume();
 	}
 	
 	protected void draw(int x, int y) {
@@ -202,3 +236,4 @@ public abstract class Game {
 		}
 	}
 }
+
