@@ -1,0 +1,26 @@
+﻿.label {}
+.text{}
+#titre {
+	-fx-text-fill: white; 
+	-fx-effect: dropshadow( gaussian , rgba(0,0,0,1) , 3,3,0,0 );
+}
+#unJoueur {
+	-fx-text-fill: orange; 
+	-fx-effect: dropshadow( gaussian , rgba(255,255,255,1) , 3,3,0,0 );
+}
+#deuxJoueurs {
+	-fx-text-fill: blue; 
+	-fx-effect: dropshadow( gaussian , rgba(255,255,255,1) , 3,3,0,0 );
+}
+#classement {
+	-fx-text-fill: red; 
+	-fx-effect: dropshadow( gaussian , rgba(255,255,255,1) , 3,3,0,0 );
+}
+#options {
+	-fx-text-fill: blueviolet; 
+	-fx-effect: dropshadow( gaussian , rgba(255,255,255,1) , 3,3,0,0 );
+}
+#quitter {
+	-fx-text-fill: black; 
+	-fx-effect: dropshadow( gaussian , rgba(255,255,255,1) , 3,3,0,0 );
+}
