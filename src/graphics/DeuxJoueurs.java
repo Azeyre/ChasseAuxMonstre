@@ -29,6 +29,9 @@ public class DeuxJoueurs extends Game {
 				if(reveal(x,y)) {
 					fini = true;
 					victoireChasseur();
+				} else if(plateau.fini()) {
+					fini = true;
+					victoireMonstre();
 				} else {
 					draw(x,y);
 					c.setPosition(x, y);
