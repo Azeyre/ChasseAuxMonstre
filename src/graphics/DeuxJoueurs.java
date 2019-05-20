@@ -37,7 +37,7 @@ public class DeuxJoueurs extends Game {
 				monstre.setOpacity(1.0);
 				draw();
 				draw(c.getX(), c.getY());
-				info.setText("Monstre : d�placez vous !");
+				info.setText("Deplacez vous");
 			} else if(m.peutJouer() && monstre.getOpacity() == 1.0) {
 				
 			}
@@ -53,11 +53,11 @@ public class DeuxJoueurs extends Game {
 				}
 			}
 		});
-		loop();
+		run();
 	}
 
 	@Override
-	public void loop() {
+	public void run() {
 		m.setup(size);
 		plateau.incrPos(m);
 		draw();

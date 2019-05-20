@@ -25,6 +25,11 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * 
+ * @author kozlova
+ * Classe mère Game, crée une nouvelle fenetre de jeu
+ */
 public abstract class Game {
 
 	protected final int WIDTH = 600, HEIGHT = 800;
@@ -50,6 +55,10 @@ public abstract class Game {
 	protected boolean fini;
 	private int sec;
 	
+	/**
+	 * Permet de créer une fenetre de jeu avec un titre passé en paramètre
+	 * @param title String
+	 */
 	public Game(String title) {
 		this.tours = 1;
 
@@ -61,15 +70,26 @@ public abstract class Game {
 		offsetY = (int) ((5.0 / size) * 15);
 		
 		stage = new Stage();
+		
+		/*
+		 * Chargement de l'image du background et du monstre
+		 */
 		backPlateau = new ImageView(new Image("file:ressources/img/plateau.png",600, 600,true,true));
 		monstre = new ImageView(new Image("file:ressources/img/monstre.png",100 * offsetTailleMonstre, 70 * offsetTailleMonstre,true,true));
+		
 		root = new VBox();
 		root.setAlignment(Pos.TOP_LEFT);
 		
+		/*
+		 * Creation du canvas avec une opacite 0.6 pour voir l'image du background
+		 */
 		canvas = new Canvas(600,600);
 		canvas.setOpacity(0.6);
 		gc = canvas.getGraphicsContext2D();
 		
+		/*
+		 * Chargement des polices personnelles et creation des labels pour informer les joueurs
+		 */
 		Font fontInfo = new Font("Arial", 16);
 		Font fontCase = new Font("Arial", 30); 
 		try {
@@ -104,6 +124,10 @@ public abstract class Game {
 		
 		root.getChildren().addAll(upper, middle, bottom);
 		scene = new Scene(root, WIDTH, HEIGHT);
+		
+		/*
+		 * Chargement du css pour customiser les labels
+		 */
 		scene.getStylesheets().add(new File("ressources/css/style.css").toURI().toString());
 		stage.setScene(scene);
 		stage.sizeToScene();
@@ -112,6 +136,9 @@ public abstract class Game {
 		stage.show();
 	}
 	
+	/*
+	 * Dessine les cases du plateau 
+	 */
 	protected void draw() {
 		gc.clearRect(0, 0, 600, 600);
 		gc.setStroke(Color.BLACK);
@@ -122,15 +149,18 @@ public abstract class Game {
 		}
 		drawCasePleine();
 	}
-	
+
+	/**
+	 * Affichage du plateau en fonction du joueur
+	 */
 	protected void drawCasePleine() {
 		gc.setFill(Color.BLACK);
 		for(int i = 0 ; i < size ; i++) {
 			for(int j = 0 ; j < size ; j++) {
-				if(m.peutJouer()) {
+				if(m.peutJouer()) { //Monstre
 					if(plateau.getCaseExplorer(i, j)) gc.fillRect(i * taille_case, j * taille_case, taille_case, taille_case);
 				}
-				else if(c.peutJouer()) {
+				else if(c.peutJouer()) { //Chasseur 
 					gc.setFill(Color.BLACK);
 					if(plateau.getCaseExplorerChasseur(i, j)) gc.fillRect(i * taille_case, j * taille_case, taille_case, taille_case);
 					
@@ -145,14 +175,26 @@ public abstract class Game {
 		}
 	}
 	
-	protected abstract void loop();
+	/*
+	 * Permet de lancer la partie
+	 */
+	protected abstract void run();
 	
+	/*
+	 * Mouvement du monstre d'une case en fonction de sa position actuelle
+	 */
 	protected void moveMonstre(int x, int y) {
+		/*
+		 * Deplacement du monstre sur le plateau
+		 */
 		if(m.move(x, y, plateau)) {
 			plateau.incrPos(m);
 			m.setJouer(false);
 			drawCasePleine();
 			
+			/*
+			 * Creation d'une animation pour le deplacement du monstre
+			 */
 			translate = new TranslateTransition();
 			translate.setDuration(Duration.millis(1000));
 			translate.setToX(offsetX + (m.getX() * taille_case));
@@ -168,6 +210,9 @@ public abstract class Game {
 			fade.play();
 			
 			sec = 5;
+			/*
+			 * Compteur de 5 secondes pour passer à l'autre joueur
+			 */
 			PauseTransition pause = new PauseTransition();
 			pause.setDuration(Duration.millis(1000));
 			pause.setDelay(Duration.ZERO);
@@ -186,18 +231,33 @@ public abstract class Game {
 			});
 			pause.play();
 		} else if(m.bloquer(plateau)) {
+			/*
+			 * Fin du jeu si le monstre se bloque
+			 */
 			fini = true;
 			victoireChasseur();
 		} else infoBas.setText("Impossible la case est deja exploree");
 	}
 	
+	/**
+	 * 
+	 * @param x Position x du plateau
+	 * @param y Position y du plateau
+	 * @return true si le chasseur a trouvé le monstre sinon false
+	 */
 	protected boolean reveal(int x, int y) {
+		/*
+		 * Recuperation de l'ancienne position du chasseur pour pouvoir l'afficher au monstre
+		 */
 		int anciennePosition = plateau.getMonstreAnciennePosition(x, y);
 		if(anciennePosition != -1) {
 			infoBas.setText("Le monstre est passe par la il y a " + anciennePosition + " tours");
 		} else infoBas.setText("Rien ici");
 		c.setJouer(false);
 		sec = 5;
+		/*
+		 * Compteur de 5 secondes pour passer à l'autre joueur
+		 */
 		PauseTransition pause = new PauseTransition();
 		pause.setDuration(Duration.millis(1000));
 		pause.setDelay(Duration.ZERO);
@@ -215,9 +275,12 @@ public abstract class Game {
 					pause.play();
 				}
 			} else if(!fini) {
+				/*
+				 * Attente du clique sur le canvas de la part du monstre pour pouvoir afficher 
+				 */
 				reset();
 				m.setJouer(true);
-				info.setText("Cliquez pour afficher la position du monstre");
+				info.setText("Cliquez pour afficher le monstre");
 				infoBas.setText("");
 			}
 		});
@@ -225,11 +288,17 @@ public abstract class Game {
 		return plateau.reveal(x, y, m);
 	}
 	
+	/*
+	 * Affiche la derniere case exploree du chasseur en rouge
+	 */
 	protected void draw(int x, int y) {
 		gc.setFill(Color.DARKRED);
 		gc.fillRect(x * taille_case, y * taille_case, taille_case, taille_case);
 	}
 	
+	/**
+	 * Reset le plateau pour permettre l'affichage du gagnant
+	 */
 	protected void reset() { 
 		gc.clearRect(0, 0, 600, 600); 
 		gc.setStroke(Color.BLACK);
@@ -240,6 +309,9 @@ public abstract class Game {
 		}
 	}
 	
+	/**
+	 * Affichage lors de la victoire du chasseur
+	 */
 	protected void victoireChasseur() {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		monstre.setOpacity(0.0);
@@ -277,6 +349,9 @@ public abstract class Game {
 		fadeInChasseur.play();	
 	}
 	
+	/**
+	 * Affichage lors de la victoire du monstre
+	 */
 	protected void victoireMonstre() {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		
