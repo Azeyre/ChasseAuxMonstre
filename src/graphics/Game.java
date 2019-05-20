@@ -1,5 +1,9 @@
 package graphics;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import game.Chasseur;
 import game.Monstre;
 import game.Plateau;
@@ -17,6 +21,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -65,7 +70,19 @@ public abstract class Game {
 		canvas.setOpacity(0.6);
 		gc = canvas.getGraphicsContext2D();
 		
-		info = new Label("Au monstre de jouer !");
+		Font fontInfo = new Font("Arial", 16);
+		Font fontCase = new Font("Arial", 30); 
+		try {
+			fontInfo = Font.loadFont(new FileInputStream(new File("ressources/font/8-BIT_WONDER.TTF")), 16);
+			fontCase = Font.loadFont(new FileInputStream(new File("ressources/font/8-BIT_WONDER.TTF")), 26);
+		} catch (FileNotFoundException e) {
+			System.err.println("La police de caractère 8-Bit-Wonder.tff est introuvable.");
+		}
+		gc.setFont(fontCase);
+		
+		info = new Label("Au monstre de jouer");
+		info.setId("info");
+		info.setFont(fontInfo);
 		upper = new StackPane();
 		upper.setAlignment(Pos.CENTER);
 		upper.getChildren().add(info);
@@ -73,6 +90,8 @@ public abstract class Game {
 		upper.setMaxSize(WIDTH, 100);
 		
 		infoBas = new Label();
+		infoBas.setId("info");
+		infoBas.setFont(fontInfo);
 		bottom = new StackPane();
 		bottom.setAlignment(Pos.CENTER);
 		bottom.getChildren().add(infoBas);
@@ -85,7 +104,7 @@ public abstract class Game {
 		
 		root.getChildren().addAll(upper, middle, bottom);
 		scene = new Scene(root, WIDTH, HEIGHT);
-		
+		scene.getStylesheets().add(new File("ressources/css/style.css").toURI().toString());
 		stage.setScene(scene);
 		stage.sizeToScene();
 		stage.setResizable(false);
@@ -112,7 +131,15 @@ public abstract class Game {
 					if(plateau.getCaseExplorer(i, j)) gc.fillRect(i * taille_case, j * taille_case, taille_case, taille_case);
 				}
 				else if(c.peutJouer()) {
+					gc.setFill(Color.BLACK);
 					if(plateau.getCaseExplorerChasseur(i, j)) gc.fillRect(i * taille_case, j * taille_case, taille_case, taille_case);
+					
+					/*
+					 * Affichage sur le canvas de l'ancienne position du monstre pour les cases explorées par le chasseur
+					 */
+					gc.setFill(Color.WHITE);
+					if(plateau.getMonstreAnciennePosition(i, j) > 0 && plateau.getCaseExplorerChasseur(i, j)) 
+						gc.fillText("" + plateau.getMonstreAnciennePosition(i, j), (i * taille_case) + (taille_case / 2) - 10, (j * taille_case) + (taille_case / 2) + 10);
 				}
 			}
 		}
@@ -144,34 +171,37 @@ public abstract class Game {
 			PauseTransition pause = new PauseTransition();
 			pause.setDuration(Duration.millis(1000));
 			pause.setDelay(Duration.ZERO);
-			info.setText("" + sec + " secondes !");
+			info.setText("" + sec + " secondes");
 			pause.setOnFinished(e -> {
 				if(sec > 1) {
 					sec--;
-					info.setText("" + sec + " secondes !");
+					info.setText("" + sec + " secondes");
 					pause.play();
 				} else if(!fini){
 					c.setJouer(true);
-					info.setText("Au chasseur de jouer !");
+					info.setText("Au chasseur de jouer");
 					infoBas.setText("");
 					draw();
 				}
 			});
 			pause.play();
-		} else infoBas.setText("Case explor�e ! Impossible d'y aller !");
+		} else if(m.bloquer(plateau)) {
+			fini = true;
+			victoireChasseur();
+		} else infoBas.setText("Impossible la case est deja exploree");
 	}
 	
 	protected boolean reveal(int x, int y) {
 		int anciennePosition = plateau.getMonstreAnciennePosition(x, y);
 		if(anciennePosition != -1) {
-			infoBas.setText("Le monstre est pass� par l� il y a : " + anciennePosition + " tours !");
-		} else infoBas.setText("Dommage, rien par ici...");
+			infoBas.setText("Le monstre est passe par la il y a " + anciennePosition + " tours");
+		} else infoBas.setText("Rien ici");
 		c.setJouer(false);
 		sec = 5;
 		PauseTransition pause = new PauseTransition();
 		pause.setDuration(Duration.millis(1000));
 		pause.setDelay(Duration.ZERO);
-		info.setText("" + sec + " secondes !");
+		info.setText("" + sec + " secondes");
 		pause.setOnFinished(e -> {
 			if(sec > 1) {
 				if(fini) {
@@ -181,13 +211,13 @@ public abstract class Game {
 					pause.stop();
 				} else {
 					sec--;
-					info.setText("" + sec + " secondes !");
+					info.setText("" + sec + " secondes");
 					pause.play();
 				}
 			} else if(!fini) {
 				reset();
 				m.setJouer(true);
-				info.setText("Monstre : cliquer pour afficher votre position.");
+				info.setText("Cliquez pour afficher la position du monstre");
 				infoBas.setText("");
 			}
 		});
@@ -208,5 +238,78 @@ public abstract class Game {
 				gc.strokeRect(i * taille_case, j * taille_case, taille_case, taille_case);
 			}
 		}
+	}
+	
+	protected void victoireChasseur() {
+		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		monstre.setOpacity(0.0);
+		
+		Font titre = new Font("Arial", 40);
+		try {
+			titre = Font.loadFont(new FileInputStream(new File("ressources/font/8-BIT_WONDER.TTF")), 40);
+		} catch (FileNotFoundException e) {
+			System.err.println("La police de caractère 8-Bit-Wonder.tff est introuvable.");
+		}
+		VBox vbox = new VBox();
+		vbox.setAlignment(Pos.CENTER);
+		Label chasseurTitre = new Label("CHASSEUR");
+		Label winTitre = new Label("WIN");
+		chasseurTitre.setFont(titre);
+		winTitre.setFont(titre);
+		chasseurTitre.setId("titre");
+		winTitre.setId("titre");
+		vbox.getChildren().addAll(chasseurTitre, winTitre);
+		vbox.setLayoutX(150);
+		vbox.setLayoutY(60);
+		
+		
+		ImageView imgChasseur = new ImageView(new Image("file:ressources/img/chasseur.png",100*5,70*5,true,true));
+		imgChasseur.setOpacity(0.0);
+		middle.getChildren().addAll(imgChasseur, vbox);
+		imgChasseur.setLayoutX(80);
+		imgChasseur.setLayoutY(150);
+		
+		FadeTransition fadeInChasseur = new FadeTransition();
+		fadeInChasseur.setDuration(Duration.millis(1000));
+		fadeInChasseur.setNode(imgChasseur);
+		fadeInChasseur.setFromValue(0.0);
+		fadeInChasseur.setToValue(1.0);
+		fadeInChasseur.play();	
+	}
+	
+	protected void victoireMonstre() {
+		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		
+		Font titre = new Font("Arial", 40);
+		try {
+			titre = Font.loadFont(new FileInputStream(new File("ressources/font/8-BIT_WONDER.TTF")), 40);
+		} catch (FileNotFoundException e) {
+			System.err.println("La police de caractère 8-Bit-Wonder.tff est introuvable.");
+		}
+		VBox vbox = new VBox();
+		vbox.setAlignment(Pos.CENTER);
+		Label monstreTitre = new Label("Monstre");
+		Label winTitre = new Label("WIN");
+		monstreTitre.setFont(titre);
+		winTitre.setFont(titre);
+		monstreTitre.setId("titre");
+		winTitre.setId("titre");
+		vbox.getChildren().addAll(monstreTitre, winTitre);
+		vbox.setLayoutX(150);
+		vbox.setLayoutY(60);
+		
+		
+		ImageView imgChasseur = new ImageView(new Image("file:ressources/img/monstre.png",100*5,70*5,true,true));
+		imgChasseur.setOpacity(0.0);
+		middle.getChildren().addAll(imgChasseur, vbox);
+		imgChasseur.setLayoutX(80);
+		imgChasseur.setLayoutY(150);
+		
+		FadeTransition fadeInChasseur = new FadeTransition();
+		fadeInChasseur.setDuration(Duration.millis(1000));
+		fadeInChasseur.setNode(imgChasseur);
+		fadeInChasseur.setFromValue(0.0);
+		fadeInChasseur.setToValue(1.0);
+		fadeInChasseur.play();
 	}
 }
