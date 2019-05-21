@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="182.0" prefWidth="337.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.controller.ControllerModes">
+   <children>
+      <VBox prefHeight="167.0" prefWidth="300.0">
+         <children>
+            <HBox prefHeight="40.0" prefWidth="300.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="34.0" prefWidth="343.0" text="Sélectionner les options bonus :" />
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="300.0">
+               <children>
+                  <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="52.0" prefWidth="301.0" text="BattleRoyale : la carte rétrécit au fur et à mesure">
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
+                  </CheckBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="300.0">
+               <children>
+                  <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="48.0" prefWidth="398.0" text="Téléportation : Téléporte le monstre s'il est bloqué">
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
+                  </CheckBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="300.0">
+               <children>
+                  <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="44.0" prefWidth="302.0" text="Hardcore : Le chasseur peut mourir également">
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
+                  </CheckBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="28.0" prefWidth="300.0">
+               <children>
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#apply" text="OK">
+                     <HBox.margin>
+                        <Insets left="132.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</VBox>
