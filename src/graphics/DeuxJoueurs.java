@@ -24,7 +24,6 @@ public class DeuxJoueurs extends Game {
 		middle.setOnMouseClicked(e -> {
 			int x = (int) (e.getX() / taille_case);
 			int y = (int) (e.getY() / taille_case);
-			System.out.println("Tape " + x + "   " + y);
 			if(c.peutJouer()) {
 				if(reveal(x,y)) {
 					fini = true;
@@ -36,13 +35,31 @@ public class DeuxJoueurs extends Game {
 					draw(x,y);
 					c.setPosition(x, y);
 				}
+			} else if(m.peutJouer() && monstre.getOpacity() == 1.0) {
+				/*
+				 * Permet le deplacement du monstre avec la souris
+				 */
+				int deltaX = x - m.getX();
+				int deltaY = y - m.getY();
+				System.out.println("X:" + deltaX + " ; Y:" + deltaY);
+				if(Math.abs(deltaX) + Math.abs(deltaY) == 1) { 
+					moveMonstre(deltaX, deltaY);
+				} 
+				/*
+				 * Deplacement a partir du bord du plateau a un autre
+				 */
+				else if(deltaX == 0 && Math.abs(deltaY) == 9) {
+					if(deltaY > 0) moveMonstre(0, -1);
+					else moveMonstre(0, 1);
+ 				} else if(deltaY == 0 && Math.abs(deltaX) == 9) {
+ 					if(deltaX > 0) moveMonstre(-1, 0);
+					else moveMonstre(1, 0);
+ 				}
 			} else if(m.peutJouer()) {
 				monstre.setOpacity(1.0);
 				draw();
 				draw(c.getX(), c.getY());
 				info.setText("Deplacez vous");
-			} else if(m.peutJouer() && monstre.getOpacity() == 1.0) {
-				
 			}
 		});
 		scene.setOnKeyPressed(e -> {

@@ -10,18 +10,22 @@ import game.Plateau;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -54,6 +58,7 @@ public abstract class Game {
 	protected TranslateTransition translate;
 	protected boolean fini;
 	private int sec;
+	protected int[][] anciennePositionMonstre;
 	
 	/**
 	 * Permet de créer une fenetre de jeu avec un titre passé en paramètre
@@ -63,6 +68,11 @@ public abstract class Game {
 		this.tours = 1;
 
 		size = 10;
+		anciennePositionMonstre = new int[size][size];
+		for(int i = 0 ; i < size ; i++) {
+			for(int j = 0 ; j < size ; j++) anciennePositionMonstre[i][j] = -1;
+		}
+		
 		plateau = new Plateau(size);
 		taille_case = (int) (600 / size);
 		double offsetTailleMonstre = (5.0 / size) * 1.4;
@@ -133,6 +143,7 @@ public abstract class Game {
 		stage.sizeToScene();
 		stage.setResizable(false);
 		stage.setTitle(title);
+		stage.setOnCloseRequest(e -> {e.consume(); quit();});
 		stage.show();
 	}
 	
@@ -168,8 +179,8 @@ public abstract class Game {
 					 * Affichage sur le canvas de l'ancienne position du monstre pour les cases explorées par le chasseur
 					 */
 					gc.setFill(Color.WHITE);
-					if(plateau.getMonstreAnciennePosition(i, j) > 0 && plateau.getCaseExplorerChasseur(i, j)) 
-						gc.fillText("" + plateau.getMonstreAnciennePosition(i, j), (i * taille_case) + (taille_case / 2) - 10, (j * taille_case) + (taille_case / 2) + 10);
+					if(anciennePositionMonstre[i][j] > 0) 
+						gc.fillText("" + anciennePositionMonstre[i][j], (i * taille_case) + (taille_case / 2) - 10, (j * taille_case) + (taille_case / 2) + 10);
 				}
 			}
 		}
@@ -191,7 +202,11 @@ public abstract class Game {
 			plateau.incrPos(m);
 			m.setJouer(false);
 			drawCasePleine();
-			
+			for(int i = 0 ; i < size ; i++) {
+				for(int j = 0 ; j < size ; j++) {
+					if(anciennePositionMonstre[i][j] > 0) anciennePositionMonstre[i][j]++;
+				}
+			}
 			/*
 			 * Creation d'une animation pour le deplacement du monstre
 			 */
@@ -284,6 +299,7 @@ public abstract class Game {
 				infoBas.setText("");
 			}
 		});
+		anciennePositionMonstre[x][y] = plateau.getMonstreAnciennePosition(x, y);
 		pause.play();
 		return plateau.reveal(x, y, m);
 	}
@@ -386,5 +402,31 @@ public abstract class Game {
 		fadeInChasseur.setFromValue(0.0);
 		fadeInChasseur.setToValue(1.0);
 		fadeInChasseur.play();
+	}
+	
+	private void quit() {
+		Stage stage = new Stage();
+		VBox root = new VBox();
+		Label l = new Label("Voulez-vous vraiment quitter ?");
+		root.setAlignment(Pos.CENTER);
+		
+		HBox b = new HBox();
+		b.setAlignment(Pos.CENTER);
+		Button oui = new Button("Oui");
+		Button non = new Button("Non");
+		b.setPadding(new Insets(5));
+		b.setSpacing(20);
+		oui.setOnAction(ev -> { System.exit(0); });
+		non.setOnAction(ev -> { stage.close(); });
+		b.getChildren().addAll(oui,non);
+		
+		root.getChildren().addAll(l, b);
+		
+		Scene scene = new Scene(root, 180, 60);
+		stage.getIcons().add(new Image("file:ressources/img/icone.png"));
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setScene(scene);
+		stage.setResizable(false);
+		stage.show();
 	}
 }
