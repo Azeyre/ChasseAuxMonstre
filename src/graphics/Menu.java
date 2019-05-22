@@ -4,6 +4,7 @@ package graphics;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,8 +17,10 @@ import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -47,7 +50,7 @@ public class Menu extends Application {
 	private static MediaPlayer mp;
 	private static ImageView speaker_on, speaker_off;
 	private static boolean mute = false;
-	private static double volume = 1.0;
+	private static double volume = 0.0;
 	private static Joueur j1, j2;
 	
 	private ImageView chasseur, monstre, back;
@@ -372,7 +375,7 @@ public class Menu extends Application {
 				public void run() {
 					if(j1 != null) {
 						t.cancel();
-						System.out.println(j1.toString());
+						SelectionMode.solo();
 					}
 				}				
 			}, 100, 100);
@@ -399,7 +402,7 @@ public class Menu extends Application {
 							@Override
 							public void run() {
 								menu.close();
-								dj = new DeuxJoueurs(j1, j2);
+								SelectionMode.duo();
 							}
 						});
 					}
@@ -418,7 +421,7 @@ public class Menu extends Application {
 			j2 = j;
 			return true;
 		}
-		System.err.println("Il y a d�j� 2 joueurs !");
+		System.err.println("Il y a déjà 2 joueurs !");
 		return false;
 	}
 	

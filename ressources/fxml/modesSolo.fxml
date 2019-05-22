@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="159.0" prefWidth="337.0" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.controller.ControllerModesSolo">
+   <children>
+      <Label alignment="CENTER" graphicTextGap="2.0" prefHeight="5.0" prefWidth="337.0" text="Sélectionner les options bonus :" />
+      <VBox spacing="5.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Taille du plateau :" />
+                  <ComboBox fx:id="comboSize" prefHeight="25.0" prefWidth="41.0">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </ComboBox>
+               </children>
+            </HBox>
+            <CheckBox fx:id="buttonTp" alignment="CENTER" mnemonicParsing="false" prefHeight="17.0" prefWidth="291.0" text="Téléportation : Téléporte le monstre s'il est bloqué" />
+            <CheckBox fx:id="buttonBr" alignment="CENTER" mnemonicParsing="false" prefHeight="17.0" prefWidth="287.0" text="Battle Royale : la carte rétrécit au fur et à mesure" />
+            <CheckBox fx:id="buttonMonstreMange" alignment="CENTER" mnemonicParsing="false" prefHeight="22.0" prefWidth="276.0" text="Hardcore : Le chasseur peut mourir également" />
+         </children>
+         <VBox.margin>
+            <Insets left="20.0" />
+         </VBox.margin>
+      </VBox>
+      <Button alignment="CENTER" mnemonicParsing="false" onAction="#apply" text="OK" />
+   </children>
+</VBox>
