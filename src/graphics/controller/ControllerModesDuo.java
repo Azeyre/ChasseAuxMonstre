@@ -20,8 +20,8 @@ public class ControllerModesDuo {
 	}
 	
 	public void apply() {
-		Game.Mode_BR = buttonTp.isSelected();
-		Game.Mode_Tp = buttonBr.isSelected();
+		Game.Mode_BR = buttonBr.isSelected();
+		Game.Mode_Tp = buttonTp.isSelected();
 		Game.Mode_MonstreMange = buttonMonstreMange.isSelected();
 		System.out.println("" + buttonTp.isSelected() + " " + buttonBr.isSelected() + " " + buttonMonstreMange.isSelected());
 		System.out.println(comboSize.getSelectionModel().getSelectedItem().toString());

@@ -21,9 +21,9 @@ public class BattleRoyale {
 	public void retrecit() {
 		System.out.println("Retrecit la zone");
 		char[][] plateau = p.getPlateau();
-		for(int i = 0 ; i < Menu.SIZE ; i++) {
-			for(int j = 0 ; j < Menu.SIZE ; j++) {
-				if(i == tailleZone || (i == (Menu.SIZE - 1 - tailleZone)) || (j == tailleZone) || (j == (Menu.SIZE - 1 - tailleZone))) {
+		for(int i = 0 ; i < p.getSize() ; i++) {
+			for(int j = 0 ; j < p.getSize() ; j++) {
+				if(i == tailleZone || (i == (p.getSize() - 1 - tailleZone)) || (j == tailleZone) || (j == (p.getSize() - 1 - tailleZone))) {
 					plateau[i][j] = Plateau.casePleine;
 					p.setExplorer(i, j);
 				}
@@ -36,9 +36,9 @@ public class BattleRoyale {
 	public void retrecit(ChasseurIA ia) {
 		System.out.println("Retrecit la zone");
 		char[][] plateau = p.getPlateau();
-		for(int i = 0 ; i < Menu.SIZE ; i++) {
-			for(int j = 0 ; j < Menu.SIZE ; j++) {
-				if(i == tailleZone || (i == (Menu.SIZE - 1 - tailleZone)) || (j == tailleZone) || (j == (Menu.SIZE - 1 - tailleZone))) {
+		for(int i = 0 ; i < p.getSize() ; i++) {
+			for(int j = 0 ; j < p.getSize() ; j++) {
+				if(i == tailleZone || (i == (p.getSize() - 1 - tailleZone)) || (j == tailleZone) || (j == (p.getSize() - 1 - tailleZone))) {
 					plateau[i][j] = Plateau.casePleine;
 					p.setExplorer(i, j);
 					ia.setExplorer(i, j);
@@ -49,4 +49,15 @@ public class BattleRoyale {
 		p.setPlateau(plateau);
 	}
 	
+	public void rectrecitGraphique() {
+		for(int i = 0 ; i < p.getSize() ; i++) {
+			for(int j = 0 ; j < p.getSize() ; j++) {
+				if(i == tailleZone || (i == (p.getSize() - 1 - tailleZone)) || (j == tailleZone) || (j == (p.getSize() - 1 - tailleZone))) {
+					p.setExplorer(i, j);
+					p.setExplorerChasseur(i, j);
+				}
+			}
+		}
+		tailleZone++;
+	}
 }

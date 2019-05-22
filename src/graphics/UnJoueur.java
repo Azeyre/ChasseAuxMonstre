@@ -34,8 +34,7 @@ public class UnJoueur extends Game {
 			System.out.println("Tape " + x + "   " + y);
 			if(c.peutJouer() && !j1.estMonstre()) {
 				if(reveal(x,y)) {
-					System.out.println("LE CHASSEUR A GAGNE WOLA");
-					System.exit(0);
+					victoireChasseur();
 				} 
 				draw(x,y);
 				c.setPosition(x, y);
@@ -43,7 +42,7 @@ public class UnJoueur extends Game {
 				monstre.setOpacity(1.0);
 				draw();
 				draw(c.getX(), c.getY());
-				info.setText("Monstre : d�placez vous !");
+				info.setText("Monstre : deplacez vous !");
 			}
 		});
 		scene.setOnKeyPressed(e -> {

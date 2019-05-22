@@ -44,10 +44,10 @@ public class DeuxJoueurs extends Game {
 					/*
 					 * Deplacement a partir du bord du plateau a un autre
 					 */
-					else if(deltaX == 0 && Math.abs(deltaY) == 9) {
+					else if(deltaX == 0 && Math.abs(deltaY) == size - 1) {
 						if(deltaY > 0) moveMonstre(0, -1);
 						else moveMonstre(0, 1);
-	 				} else if(deltaY == 0 && Math.abs(deltaX) == 9) {
+	 				} else if(deltaY == 0 && Math.abs(deltaX) == size - 1) {
 	 					if(deltaX > 0) moveMonstre(-1, 0);
 						else moveMonstre(1, 0);
 	 				}

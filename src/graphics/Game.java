@@ -3,6 +3,8 @@ package graphics;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import game.Chasseur;
 import game.Monstre;
@@ -28,6 +30,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import options.BattleRoyale;
+import options.Teleport;
 
 /**
  * 
@@ -59,6 +63,8 @@ public abstract class Game {
 	protected int sec;
 	protected int[][] anciennePositionMonstre;
 	public static boolean Mode_BR = false, Mode_Tp = false, Mode_MonstreMange = false;
+	protected BattleRoyale br;
+	private boolean retrecitBr = false;
 	
 	/**
 	 * Permet de créer une fenetre de jeu avec un titre passé en paramètre
@@ -68,85 +74,93 @@ public abstract class Game {
 		/*
 		 * On attend la fin de la selection des modes pour pouvoir lancer la partie
 		 */
-			tours = 0;
-			this.size = size;
-			anciennePositionMonstre = new int[size][size];
-			for(int i = 0 ; i < size ; i++) {
-				for(int j = 0 ; j < size ; j++) anciennePositionMonstre[i][j] = -1;
-			}
-			
-			plateau = new Plateau(size);
-			taille_case = (int) (600 / size);
-			double offsetTailleMonstre = (5.0 / size) * 1.4;
-			offsetX = (int) ((5.0 / size) * 30);
-			offsetY = (int) ((5.0 / size) * 15);
-			
-			stage = new Stage();
-			
-			/*
-			 * Chargement de l'image du background et du monstre
-			 */
-			backPlateau = new ImageView(new Image("file:ressources/img/plateau.png",600, 600,true,true));
-			monstre = new ImageView(new Image("file:ressources/img/monstre.png",100 * offsetTailleMonstre, 70 * offsetTailleMonstre,true,true));
-			
-			root = new VBox();
-			root.setAlignment(Pos.TOP_LEFT);
-			
-			/*
-			 * Creation du canvas avec une opacite 0.6 pour voir l'image du background
-			 */
-			canvas = new Canvas(600,600);
-			canvas.setOpacity(0.6);
-			gc = canvas.getGraphicsContext2D();
-			
-			/*
-			 * Chargement des polices personnelles et creation des labels pour informer les joueurs
-			 */
-			Font fontInfo = new Font("Arial", 16);
-			Font fontCase = new Font("Arial", 30); 
-			try {
-				fontInfo = Font.loadFont(new FileInputStream(new File("ressources/font/8-BIT_WONDER.TTF")), 16);
-				fontCase = Font.loadFont(new FileInputStream(new File("ressources/font/8-BIT_WONDER.TTF")), 26);
-			} catch (FileNotFoundException e) {
-				System.err.println("La police de caractère 8-Bit-Wonder.tff est introuvable.");
-			}
-			gc.setFont(fontCase);
-			
-			info = new Label("Au monstre de jouer");
-			info.setId("info");
-			info.setFont(fontInfo);
-			upper = new StackPane();
-			upper.setAlignment(Pos.CENTER);
-			upper.getChildren().add(info);
-			upper.setMinSize(WIDTH, 100);
-			upper.setMaxSize(WIDTH, 100);
-			
-			infoBas = new Label();
-			infoBas.setId("info");
-			infoBas.setFont(fontInfo);
-			bottom = new StackPane();
-			bottom.setAlignment(Pos.CENTER);
-			bottom.getChildren().add(infoBas);
-			bottom.setMinSize(WIDTH, 100);
-			bottom.setMaxSize(WIDTH, 100);
-			
-			middle = new Pane();
-			middle.setMaxSize(600, 600);
-			middle.getChildren().addAll(backPlateau, canvas, monstre);
-			
-			root.getChildren().addAll(upper, middle, bottom);
-			scene = new Scene(root, WIDTH, HEIGHT);
-			
-			/*
-			 * Chargement du css pour customiser les labels
-			 */
-			scene.getStylesheets().add(new File("ressources/css/style.css").toURI().toString());
-			stage.setScene(scene);
-			stage.sizeToScene();
-			stage.setResizable(false);
-			stage.setTitle(title);
-			stage.setOnCloseRequest(e -> {e.consume(); quit();});
-			stage.show();	
+		tours = 0;
+		this.size = size;
+		anciennePositionMonstre = new int[size][size];
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++)
+				anciennePositionMonstre[i][j] = -1;
+		}
+
+		plateau = new Plateau(size);
+		br = new BattleRoyale(plateau);
+		taille_case = (int) (600 / size);
+		double offsetTailleMonstre = (5.0 / size) * 1.4;
+		offsetX = (int) ((5.0 / size) * 30);
+		offsetY = (int) ((5.0 / size) * 15);
+
+		stage = new Stage();
+
+		/*
+		 * Chargement de l'image du background et du monstre
+		 */
+		backPlateau = new ImageView(new Image("file:ressources/img/plateau.png", 600, 600, true, true));
+		monstre = new ImageView(new Image("file:ressources/img/monstre.png", 100 * offsetTailleMonstre,
+				70 * offsetTailleMonstre, true, true));
+
+		root = new VBox();
+		root.setAlignment(Pos.TOP_LEFT);
+
+		/*
+		 * Creation du canvas avec une opacite 0.6 pour voir l'image du background
+		 */
+		canvas = new Canvas(600, 600);
+		canvas.setOpacity(0.6);
+		gc = canvas.getGraphicsContext2D();
+
+		/*
+		 * Chargement des polices personnelles et creation des labels pour informer les
+		 * joueurs
+		 */
+		Font fontInfo = new Font("Arial", 16);
+		Font fontCase = new Font("Arial", 30);
+		try {
+			fontInfo = Font.loadFont(new FileInputStream(new File("ressources/font/8-BIT_WONDER.TTF")), 16);
+			fontCase = Font.loadFont(new FileInputStream(new File("ressources/font/8-BIT_WONDER.TTF")), 26);
+		} catch (FileNotFoundException e) {
+			System.err.println("La police de caractère 8-Bit-Wonder.tff est introuvable.");
+		}
+		gc.setFont(fontCase);
+
+		info = new Label("Au monstre de jouer");
+		info.setId("info");
+		info.setFont(fontInfo);
+		upper = new StackPane();
+		upper.setAlignment(Pos.CENTER);
+		upper.getChildren().add(info);
+		upper.setMinSize(WIDTH, 100);
+		upper.setMaxSize(WIDTH, 100);
+
+		infoBas = new Label();
+		infoBas.setId("info");
+		infoBas.setFont(fontInfo);
+		bottom = new StackPane();
+		bottom.setAlignment(Pos.CENTER);
+		bottom.getChildren().add(infoBas);
+		bottom.setMinSize(WIDTH, 100);
+		bottom.setMaxSize(WIDTH, 100);
+
+		middle = new Pane();
+		middle.setMaxSize(600, 600);
+		middle.getChildren().addAll(backPlateau, canvas, monstre);
+
+		root.getChildren().addAll(upper, middle, bottom);
+		scene = new Scene(root, WIDTH, HEIGHT);
+
+		/*
+		 * Chargement du css pour customiser les labels
+		 */
+		scene.getStylesheets().add(new File("ressources/css/style.css").toURI().toString());
+		stage.setScene(scene);
+		stage.getIcons().add(new Image("file:ressources/img/icone_principale.png"));
+		stage.sizeToScene();
+		stage.setResizable(false);
+		stage.setTitle(title);
+		stage.setOnCloseRequest(e -> {
+			e.consume();
+			quit();
+		});
+		stage.show();
 	}
 	
 	/*
@@ -210,6 +224,9 @@ public abstract class Game {
 					if(anciennePositionMonstre[i][j] > 0) anciennePositionMonstre[i][j]++;
 				}
 			}
+			if(!Mode_Tp && m.bloquer(plateau) && !plateau.fini()) {
+				victoireChasseur();
+			}
 			/*
 			 * Creation d'une animation pour le deplacement du monstre
 			 */
@@ -245,18 +262,26 @@ public abstract class Game {
 					info.setText("Au chasseur de jouer");
 					infoBas.setText("");
 					draw();
+					if(retrecitBr) {
+						infoBas.setText("Le plateau se reduit");
+					}
+					retrecitBr = false;
 				}
 			});
 			pause.play();
-		} else if(m.bloquer(plateau)) {
-			/*
-			 * Fin du jeu si le monstre se bloque
-			 */
-			fini = true;
-			victoireChasseur();
 		} else infoBas.setText("Impossible la case est deja exploree");
 	}
 	
+	private boolean ModeBR() {
+		if(tours % 3 == 0 && Mode_BR) {
+			br.rectrecitGraphique();
+			return true;
+		} else if(tours % 3 == 2 && Mode_BR) {
+			infoBas.setText("Prochain tour le plateau va se retrecir");
+		}
+		return false;
+	}
+
 	/**
 	 * 
 	 * @param x Position x du plateau
@@ -273,6 +298,9 @@ public abstract class Game {
 		} else infoBas.setText("Rien ici");
 		c.setJouer(false);
 		sec = 5;
+		if(retrecitBr) {
+			infoBas.setText("Le plateau se reduit");
+		}
 		/*
 		 * Compteur de 5 secondes pour passer à l'autre joueur
 		 */
@@ -300,6 +328,25 @@ public abstract class Game {
 				m.setJouer(true);
 				info.setText("Cliquez pour afficher le monstre");
 				infoBas.setText("");
+				retrecitBr = ModeBR();
+				if(retrecitBr) {
+					infoBas.setText("Le plateau se reduit");
+				}
+				while(Mode_Tp && m.bloquer(plateau) && !plateau.fini()) {
+					plateau.setExplorer(m.getX(), m.getY());
+					Teleport.teleport(plateau, m);
+					draw();
+					infoBas.setText("Le monstre a ete teleporte");
+					translate = new TranslateTransition();
+					translate.setDuration(Duration.millis(1));
+					translate.setToX(offsetX + (m.getX() * taille_case));
+					translate.setToY(offsetY + (m.getY() * taille_case));
+					translate.setNode(monstre);
+					translate.play();
+				}			
+				if(plateau.fini()) {
+					victoireMonstre();
+				} 
 			}
 		});
 		anciennePositionMonstre[x][y] = plateau.getMonstreAnciennePosition(x, y);

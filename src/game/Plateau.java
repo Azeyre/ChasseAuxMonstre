@@ -157,13 +157,17 @@ public class Plateau {
 		this.caseExplorer[x][y] = true;
 	}
 	
+	public void setExplorerChasseur(int x, int y) {
+		this.caseExplorerChasseur[x][y] = true;
+	}
+	
 	public int getSize() {
 		return this.size;
 	}
 	public boolean fini() {
 		for(int i = 0 ; i < caseExplorer.length ; i++) {
 			for(int j = 0 ; j < caseExplorer[i].length ; j++) {
-				//Renvoie faux s'il reste des case à explorer
+				//Renvoie faux s'il reste des case ï¿½ explorer
 				if(!caseExplorer[i][j]) return false;
 			}
 		}
