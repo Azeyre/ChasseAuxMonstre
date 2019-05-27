@@ -5,15 +5,15 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="159.0" prefWidth="337.0" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.controller.ControllerModesSolo">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.controller.ControllerModesSolo">
    <children>
       <Label alignment="CENTER" graphicTextGap="2.0" prefHeight="5.0" prefWidth="337.0" text="Sélectionner les options bonus :" />
       <VBox spacing="5.0">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER_LEFT" prefWidth="200.0">
                <children>
                   <Label text="Taille du plateau :" />
-                  <ComboBox fx:id="comboSize" prefHeight="25.0" prefWidth="41.0">
+                  <ComboBox fx:id="comboSize" prefHeight="25.0">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
