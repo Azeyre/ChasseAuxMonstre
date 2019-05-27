@@ -92,4 +92,5 @@ public class DeuxJoueurs extends Game {
 		m.setJouer(true);
 		c.setJouer(false);
 	}
+	
 }

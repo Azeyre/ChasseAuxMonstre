@@ -3,8 +3,6 @@ package graphics;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import game.Chasseur;
 import game.Monstre;
@@ -26,6 +24,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -41,7 +41,7 @@ import options.Teleport;
  */
 public abstract class Game {
 
-	protected final int WIDTH = 600, HEIGHT = 800;
+	protected final int WIDTH = 600, HEIGHT = 700;
 	protected ImageView monstre, backPlateau;
 	protected int taille_case;
 	protected int tours;
@@ -129,8 +129,8 @@ public abstract class Game {
 		upper = new StackPane();
 		upper.setAlignment(Pos.CENTER);
 		upper.getChildren().add(info);
-		upper.setMinSize(WIDTH, 100);
-		upper.setMaxSize(WIDTH, 100);
+		upper.setMinSize(WIDTH, 50);
+		upper.setMaxSize(WIDTH, 50);
 
 		infoBas = new Label();
 		infoBas.setId("info");
@@ -138,8 +138,8 @@ public abstract class Game {
 		bottom = new StackPane();
 		bottom.setAlignment(Pos.CENTER);
 		bottom.getChildren().add(infoBas);
-		bottom.setMinSize(WIDTH, 100);
-		bottom.setMaxSize(WIDTH, 100);
+		bottom.setMinSize(WIDTH, 50);
+		bottom.setMaxSize(WIDTH, 50);
 
 		middle = new Pane();
 		middle.setMaxSize(600, 600);
@@ -162,6 +162,20 @@ public abstract class Game {
 			quit();
 		});
 		stage.show();
+	}
+	
+	protected void tirAudio() {
+		Media me = new Media(new File("ressources/audio/shoot.m4a").toURI().toString());
+		MediaPlayer mp = new MediaPlayer(me);
+		mp.setVolume(0.5);
+		mp.play();
+	}
+	
+	protected void loupAudio() {
+		Media me = new Media(new File("ressources/audio/loup.m4a").toURI().toString());
+		MediaPlayer mp = new MediaPlayer(me);
+		mp.setVolume(0.5);
+		mp.play();
 	}
 	
 	/*
@@ -390,76 +404,64 @@ public abstract class Game {
 	 * Affichage lors de la victoire du chasseur
 	 */
 	protected void victoireChasseur() {
-		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		monstre.setOpacity(0.0);
-		
-		Font titre = new Font("Arial", 40);
-		try {
-			titre = Font.loadFont(new FileInputStream(new File("ressources/font/8-BIT_WONDER.TTF")), 40);
-		} catch (FileNotFoundException e) {
-			System.err.println("La police de caractère 8-Bit-Wonder.tff est introuvable.");
-		}
-		VBox vbox = new VBox();
-		vbox.setAlignment(Pos.CENTER);
-		Label chasseurTitre = new Label("CHASSEUR");
-		Label winTitre = new Label("WIN");
-		chasseurTitre.setFont(titre);
-		winTitre.setFont(titre);
-		chasseurTitre.setId("titre");
-		winTitre.setId("titre");
-		vbox.getChildren().addAll(chasseurTitre, winTitre);
-		vbox.setLayoutX(150);
-		vbox.setLayoutY(60);
-		
-		
-		ImageView imgChasseur = new ImageView(new Image("file:ressources/img/chasseur.png",100*5,70*5,true,true));
-		imgChasseur.setOpacity(0.0);
-		middle.getChildren().addAll(imgChasseur, vbox);
-		imgChasseur.setLayoutX(80);
-		imgChasseur.setLayoutY(150);
-		
-		FadeTransition fadeInChasseur = new FadeTransition();
-		fadeInChasseur.setDuration(Duration.millis(1000));
-		fadeInChasseur.setNode(imgChasseur);
-		fadeInChasseur.setFromValue(0.0);
-		fadeInChasseur.setToValue(1.0);
-		fadeInChasseur.play();	
+		victoire(c);
 	}
 	
 	/**
 	 * Affichage lors de la victoire du monstre
 	 */
 	protected void victoireMonstre() {
+		victoire(m);
+	}
+	
+	private void victoire(Joueur j) {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		
 		Font titre = new Font("Arial", 40);
 		try {
 			titre = Font.loadFont(new FileInputStream(new File("ressources/font/8-BIT_WONDER.TTF")), 40);
 		} catch (FileNotFoundException e) {
 			System.err.println("La police de caractère 8-Bit-Wonder.tff est introuvable.");
 		}
+		Label gagnantTitre;
+		Label winTitre = new Label("WIN");
+		ImageView img;
+		if(j.estMonstre()) {
+			gagnantTitre = new Label("Monstre");
+			img = new ImageView(new Image("file:ressources/img/monstre.png",100*5,70*5,true,true));
+		} else {
+			gagnantTitre = new Label("Chasseur");
+			img = new ImageView(new Image("file:ressources/img/chasseur.png",100*5,70*5,true,true));
+		}
+		
 		VBox vbox = new VBox();
 		vbox.setAlignment(Pos.CENTER);
-		Label monstreTitre = new Label("Monstre");
-		Label winTitre = new Label("WIN");
-		monstreTitre.setFont(titre);
+		gagnantTitre.setFont(titre);
 		winTitre.setFont(titre);
-		monstreTitre.setId("titre");
+		gagnantTitre.setId("titre");
 		winTitre.setId("titre");
-		vbox.getChildren().addAll(monstreTitre, winTitre);
+		vbox.getChildren().addAll(gagnantTitre, winTitre);
 		vbox.setLayoutX(150);
 		vbox.setLayoutY(60);
 		
+		VBox options = new VBox();
+		Label menuTitre = new Label("Menu");
+		Label quitTitre = new Label("Quitter");
+		menuTitre.setFont(titre);
+		menuTitre.setId("titre");
+		quitTitre.setFont(titre);
+		quitTitre.setId("quitter");
+		options.getChildren().addAll(menuTitre, quitTitre);
+		options.setLayoutX(300);
+		options.setLayoutY(240);
 		
-		ImageView imgChasseur = new ImageView(new Image("file:ressources/img/monstre.png",100*5,70*5,true,true));
-		imgChasseur.setOpacity(0.0);
-		middle.getChildren().addAll(imgChasseur, vbox);
-		imgChasseur.setLayoutX(80);
-		imgChasseur.setLayoutY(150);
+		img.setOpacity(0.0);
+		middle.getChildren().addAll(img, vbox, options);
+		img.setLayoutX(80);
+		img.setLayoutY(150);
 		
 		FadeTransition fadeInChasseur = new FadeTransition();
 		fadeInChasseur.setDuration(Duration.millis(1000));
-		fadeInChasseur.setNode(imgChasseur);
+		fadeInChasseur.setNode(img);
 		fadeInChasseur.setFromValue(0.0);
 		fadeInChasseur.setToValue(1.0);
 		fadeInChasseur.play();

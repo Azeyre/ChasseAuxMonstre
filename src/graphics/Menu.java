@@ -63,7 +63,7 @@ public class Menu extends Application {
 	private Canvas canvas;
 	private GraphicsContext gc;
 	private DeuxJoueurs dj;
-	private Stage menu;
+	private static Stage menu;
 	
 	public void start(Stage stage) throws IOException {
 		StackPane root = new StackPane();
@@ -375,7 +375,13 @@ public class Menu extends Application {
 				public void run() {
 					if(j1 != null) {
 						t.cancel();
-						SelectionMode.solo();
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								menu.hide();
+								SelectionMode.solo();
+							}
+						});
 					}
 				}				
 			}, 100, 100);
@@ -401,7 +407,7 @@ public class Menu extends Application {
 						Platform.runLater(new Runnable() {
 							@Override
 							public void run() {
-								menu.close();
+								menu.hide();
 								SelectionMode.duo();
 							}
 						});
@@ -428,5 +434,9 @@ public class Menu extends Application {
 	public static Joueur getJoueur(int n) {
 		if(n == 1) return j1;
 		return j2;
+	}
+	
+	public static void show() {
+		menu.show();
 	}
 }
