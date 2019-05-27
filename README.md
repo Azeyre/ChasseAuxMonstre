@@ -2,9 +2,8 @@
 ### Fait par : Kozlov Antoine, Michot Julien, Lantoine Gautier , GROUPE K
 
 ## Pour lancer le jeu : (Requis : Java installé)
-Windows: /jar/windows.bat
-Linux: 
- - cd jar/ 
+Windows: /windows.bat
+Linux:  
  - chmod +x linux.sh
  - ./linux.sh
 
