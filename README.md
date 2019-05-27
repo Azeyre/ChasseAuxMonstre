@@ -40,4 +40,4 @@ Lorsque le monstre n'a plus aucun moyen de se déplacer (Haut, Bas, Gauche, Droi
 - ### Mode "Monstre mange Chasseur" :
 Si le chasseur tape sur une case adjacente de celle où se trouve le monstre, alors le monstre peut "manger" le chasseur et la partie se termine (Victoire du monstre)
 
-[Source code](https://github.com/Azeyre/ChasseAuxMonstres)
+[Source code](https://github.com/Azeyre/ChasseAuxMonstre)
