@@ -22,7 +22,6 @@
             </HBox>
             <CheckBox fx:id="buttonTp" alignment="CENTER" mnemonicParsing="false" prefHeight="17.0" prefWidth="291.0" text="Téléportation : Téléporte le monstre s'il est bloqué" />
             <CheckBox fx:id="buttonBr" alignment="CENTER" mnemonicParsing="false" prefHeight="17.0" prefWidth="287.0" text="Battle Royale : la carte rétrécit au fur et à mesure" />
-            <CheckBox fx:id="buttonMonstreMange" alignment="CENTER" mnemonicParsing="false" prefHeight="22.0" prefWidth="276.0" text="Hardcore : Le chasseur peut mourir également" />
          </children>
          <VBox.margin>
             <Insets left="20.0" />
