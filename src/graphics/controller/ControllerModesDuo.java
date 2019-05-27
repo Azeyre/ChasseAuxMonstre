@@ -3,6 +3,7 @@ package graphics.controller;
 import graphics.DeuxJoueurs;
 import graphics.Game;
 import graphics.Menu;
+import graphics.MenuOptions;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -31,4 +32,7 @@ public class ControllerModesDuo {
 		stage.close();
 	}
 
+	public void commands() {
+		MenuOptions.commands();
+	}
 }

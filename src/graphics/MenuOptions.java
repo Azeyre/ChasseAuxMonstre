@@ -24,5 +24,18 @@ public class MenuOptions {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void commands() {
+		try {
+			Stage s = new Stage();
+			URL url = new File("ressources/fxml/howToMove.fxml").toURL();
+			Parent settings = FXMLLoader.load(url);
+			s.setScene(new Scene(settings));
+			s.initModality(Modality.APPLICATION_MODAL);
+			s.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

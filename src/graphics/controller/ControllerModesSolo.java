@@ -4,7 +4,8 @@ import graphics.Game;
 import graphics.IAvsIA;
 import graphics.Joueur;
 import graphics.Menu;
-import graphics.UnJoueur;
+import graphics.MenuOptions;
+import graphics.UnJoueurMonstre;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -28,10 +29,14 @@ public class ControllerModesSolo {
 		Joueur j1 = Menu.getJoueur(1);
 		if(j1 == null) {
 			IAvsIA ia = new IAvsIA(Integer.valueOf(comboSize.getSelectionModel().getSelectedItem().toString()));
-		} else {
-			UnJoueur uj = new UnJoueur(j1, Integer.valueOf(comboSize.getSelectionModel().getSelectedItem().toString()));
+		} else if(j1.estMonstre()) {
+			UnJoueurMonstre uj = new UnJoueurMonstre(j1, Integer.valueOf(comboSize.getSelectionModel().getSelectedItem().toString()));
 		}
 		Stage stage  = (Stage) buttonTp.getScene().getWindow();
 		stage.close();
+	}
+	
+	public void commands() {
+		MenuOptions.commands();
 	}
 }
