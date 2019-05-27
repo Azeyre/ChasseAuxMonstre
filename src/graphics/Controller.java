@@ -38,4 +38,7 @@ public class Controller {
 		Menu.setMute(mute);
 	}
 
+	public void commands() {
+		MenuOptions.commands();
+	}
 }

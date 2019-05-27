@@ -133,6 +133,12 @@ public abstract class Game {
 		upper.getChildren().add(info);
 		upper.setMinSize(WIDTH, 50);
 		upper.setMaxSize(WIDTH, 50);
+		
+		Button options = new Button();
+		options.setGraphic(new ImageView(new Image("file:ressources/img/options.png", 16, 16, true, true)));
+		options.setOnAction(e -> { MenuOptions.affiche(); });
+		upper.getChildren().add(options);
+		StackPane.setAlignment(options, Pos.TOP_LEFT);
 
 		infoBas = new Label();
 		infoBas.setId("info");

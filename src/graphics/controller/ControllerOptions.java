@@ -1,6 +1,7 @@
 package graphics.controller;
 
 import graphics.Menu;
+import graphics.MenuOptions;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
@@ -37,6 +38,10 @@ public class ControllerOptions {
 		stage.close();
 		Menu.setVolume(volume / 100);
 		Menu.setMute(mute);
+	}
+	
+	public void commands() {
+		MenuOptions.commands();
 	}
 
 }
