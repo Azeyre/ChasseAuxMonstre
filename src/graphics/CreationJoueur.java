@@ -14,10 +14,23 @@ public abstract class CreationJoueur {
 	
 	static Stage s;
 	
-	public static void affiche() {
+	public static void duo() {
 		try {
 			s = new Stage();
-			URL url = new File("ressources/fxml/creationJoueur.fxml").toURL();
+			URL url = new File("ressources/fxml/creationJoueurDuo.fxml").toURL();
+			Parent settings = FXMLLoader.load(url);
+			s.setScene(new Scene(settings));
+			s.initModality(Modality.APPLICATION_MODAL);
+			s.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void solo() {
+		try {
+			s = new Stage();
+			URL url = new File("ressources/fxml/creationJoueurSolo.fxml").toURL();
 			Parent settings = FXMLLoader.load(url);
 			s.setScene(new Scene(settings));
 			s.initModality(Modality.APPLICATION_MODAL);

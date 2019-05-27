@@ -30,29 +30,30 @@ public class Chasseur extends Joueur {
 	public int getX() {return lastPos.getX();}
 	
 	/**
-	 * Retourne la position du chasseur en ordonnée
+	 * Retourne la position du chasseur en ordonnï¿½e
 	 * @return y int
 	 */
 	public int getY() {return lastPos.getY();}
 	
 	/**
-	 * Met à jour la position du chasseur en abscisse
+	 * Met ï¿½ jour la position du chasseur en abscisse
 	 * @param x int
 	 */
 	public void setX(int x) {lastPos.setX(x);}
 	
 	/**
-	 * Met à jour la position du chasseur en ordonnée
+	 * Met ï¿½ jour la position du chasseur en ordonnï¿½e
 	 * @param y int
 	 */
 	public void setY(int y) {lastPos.setY(y);}
 	
 	/**
-	 * Met à jour la position du chasseur en abscisse et en ordonnée
+	 * Met ï¿½ jour la position du chasseur en abscisse et en ordonnï¿½e
 	 * @param x int
 	 * @param y int
 	 */
 	public void setPosition(int x, int y) {lastPos.setX(x); lastPos.setY(y);}
+	public void setPosition(Position p) { lastPos = p; }
 
 	@Override
 	public boolean estMonstre() {

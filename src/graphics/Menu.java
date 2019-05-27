@@ -105,35 +105,9 @@ public class Menu extends Application {
 		stage.setTitle("Chasse Aux Monstres");
 		stage.setResizable(false);
 		stage.centerOnScreen();
-		stage.setOnCloseRequest(e -> { e.consume(); quit(); });
+		stage.setOnCloseRequest(e -> { e.consume(); MenuQuit.open(); });
 		stage.show();
 		menu = stage;
-	}
-	
-	private void quit() {
-		Stage stage = new Stage();
-		VBox root = new VBox();
-		Label l = new Label("Voulez-vous vraiment quitter ?");
-		root.setAlignment(Pos.CENTER);
-		
-		HBox b = new HBox();
-		b.setAlignment(Pos.CENTER);
-		Button oui = new Button("Oui");
-		Button non = new Button("Non");
-		b.setPadding(new Insets(5));
-		b.setSpacing(20);
-		oui.setOnAction(ev -> { System.exit(0); });
-		non.setOnAction(ev -> { stage.close(); });
-		b.getChildren().addAll(oui,non);
-		
-		root.getChildren().addAll(l, b);
-		
-		Scene scene = new Scene(root, 180, 60);
-		stage.getIcons().add(new Image("file:ressources/img/icone.png"));
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.setScene(scene);
-		stage.setResizable(false);
-		stage.show();
 	}
 	
 	private void loadImage() {
@@ -365,78 +339,35 @@ public class Menu extends Application {
 	}
 	
 	private void confirmSelection() {
-		if(selection == quitter) quit();
+		if(selection == quitter) MenuQuit.open();
 		else if(selection == unJoueur) {
 			j1 = null;
-			CreationJoueur.affiche();
-			Timer t = new Timer();
-			t.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					if(j1 != null) {
-						t.cancel();
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								menu.hide();
-								SelectionMode.solo();
-							}
-						});
-					}
-				}				
-			}, 100, 100);
+			CreationJoueur.solo();
 		} else if(selection == deuxJoueurs) {
 			j1 = null; j2 = null;
-			CreationJoueur.affiche();
-			Timer t = new Timer();
-			t.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					//System.out.println("Waiting for creation players");
-					if(j1 != null && j2 == null && !CreationJoueur.estOuvert()) {
-						//t.cancel();
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								CreationJoueur.affiche();
-							}
-						});
-					} else if(j2 != null) {
-						t.cancel();
-						System.out.println(j1.toString() + "   " + j2.toString());
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								menu.hide();
-								SelectionMode.duo();
-							}
-						});
-					}
-				}
-			}, 100, 100);
+			CreationJoueur.duo();
 		} else if(selection == classement) {
 			
 		} else if(selection == options) MenuOptions.affiche();
 	}
 	
-	public static boolean addPlayer(Joueur j) {
+	public static void addPlayer(Joueur j) {
 		if(j1 == null) {
 			j1 = j;
-			return true;
-		} else if(j2 == null) {
-			j2 = j;
-			return true;
-		}
-		System.err.println("Il y a déjà 2 joueurs !");
-		return false;
+		} else j2 = j;
 	}
 	
 	public static Joueur getJoueur(int n) {
 		if(n == 1) return j1;
-		return j2;
+		if(n == 2) return j2;
+		return null;
 	}
 	
 	public static void show() {
 		menu.show();
+	}
+	
+	public static void hide() {
+		menu.hide();
 	}
 }

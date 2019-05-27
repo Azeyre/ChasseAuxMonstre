@@ -1,6 +1,8 @@
 package graphics.controller;
 
 import graphics.Game;
+import graphics.IAvsIA;
+import graphics.Joueur;
 import graphics.Menu;
 import graphics.UnJoueur;
 import javafx.fxml.FXML;
@@ -23,10 +25,13 @@ public class ControllerModesSolo {
 		Game.Mode_BR = buttonTp.isSelected();
 		Game.Mode_Tp = buttonBr.isSelected();
 		Game.Mode_MonstreMange = buttonMonstreMange.isSelected();
-		UnJoueur uj = new UnJoueur(Menu.getJoueur(1), Integer.valueOf(comboSize.getSelectionModel().getSelectedItem().toString()));
-		
+		Joueur j1 = Menu.getJoueur(1);
+		if(j1 == null) {
+			IAvsIA ia = new IAvsIA(Integer.valueOf(comboSize.getSelectionModel().getSelectedItem().toString()));
+		} else {
+			UnJoueur uj = new UnJoueur(j1, Integer.valueOf(comboSize.getSelectionModel().getSelectedItem().toString()));
+		}
 		Stage stage  = (Stage) buttonTp.getScene().getWindow();
 		stage.close();
 	}
-
 }

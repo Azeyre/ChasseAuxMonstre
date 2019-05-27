@@ -13,16 +13,18 @@ import menu.Menu;
  */
 public class ChasseurIA {
 	
-	private boolean[][] caseExplorerParMonstre = new boolean[Menu.SIZE][Menu.SIZE];
+	private boolean[][] caseExplorerParMonstre;
 	private Position position;
 	private int proche = -1;
 	private Plateau p;
+	int size;
 	
 	public ChasseurIA(Plateau p) {
 		this.p = p;
-		caseExplorerParMonstre = new boolean[Menu.SIZE][Menu.SIZE];
+		caseExplorerParMonstre = new boolean[p.getSize()][p.getSize()];
 		this.position = null;
 		this.proche = -1;
+		this.size = p.getSize();
 	}
 	
 	public Position pos(Plateau p) {
@@ -35,17 +37,17 @@ public class ChasseurIA {
 		
 		if(debug) System.out.println("Proche = " + proche);
 		
-		//Fait des tentatives aléatoire tant qu'il n'y a pas d'information sur la position du monstre
+		//Fait des tentatives alï¿½atoire tant qu'il n'y a pas d'information sur la position du monstre
 		if(proche == -1) {
 			do {
 				if(debug) System.out.println("Random");
-				x = randomInt(0, Menu.SIZE-1);
-				y = randomInt(0, Menu.SIZE-1);
+				x = randomInt(0, size-1);
+				y = randomInt(0, size-1);
 				if(debug) System.out.println("Essai en : X=" + x  + " ; Y=" + y);
 				proche = p.getMonstreAnciennePosition(x, y);
 				/*
-				 * Proche vaut -1 si le monstre n'est pas passé sur la case ciblé
-				 * Proche = le nombre de tours depuis que le monstre est passé sur la case ciblé
+				 * Proche vaut -1 si le monstre n'est pas passï¿½ sur la case ciblï¿½
+				 * Proche = le nombre de tours depuis que le monstre est passï¿½ sur la case ciblï¿½
 				 * 
 				 * Proche = -1 = Inconnu
 				 * Proche = [0;x] = Monstre ancienne position il y a x tours
@@ -57,11 +59,11 @@ public class ChasseurIA {
 					trouve = true;
 				}
 				boucle++;
-			} while(caseExplorerParMonstre[x][y] && boucle < Menu.SIZE && !trouve);
+			} while(caseExplorerParMonstre[x][y] && boucle < size && !trouve);
 			if(trouve) caseExplorerParMonstre[x][y] = true;
 		} else {
-			//Si proche dépasse la taille du plateau, on refait des tentatives aléatoires
-			if(proche > Menu.SIZE) {proche = -1; return pos(p);}
+			//Si proche dï¿½passe la taille du plateau, on refait des tentatives alï¿½atoires
+			if(proche > size) {proche = -1; return pos(p);}
 			do {
 				if(debug) System.out.println("Ancienne position : X=" + position.getX()  + " ; Y=" + position.getY() + ", proche=" + proche);
 				
@@ -79,19 +81,19 @@ public class ChasseurIA {
 				if(debug) System.out.println("AleaY=" + aleaY);
 				
 				y = position.getY() + aleaY;
-				if(x < 0) x = Menu.SIZE + x;
-				if(x >= Menu.SIZE) x = x - Menu.SIZE;
-				if(y < 0) y = Menu.SIZE + y;
-				if(y >= Menu.SIZE) y = y - Menu.SIZE; 
+				if(x < 0) x = size + x;
+				if(x >= size) x = x - size;
+				if(y < 0) y = size + y;
+				if(y >= size) y = y - size; 
 				if(debug) System.out.println("Essai en : X=" + x  + " ; Y=" + y);
 				boucle++;
-			} while(caseExplorerParMonstre[x][y] && !p.fini() && boucle < (proche * 4)); //Le monstre ne peut pas repasser sur une case qu'il a deja exploré
+			} while(caseExplorerParMonstre[x][y] && !p.fini() && boucle < (proche * 4)); //Le monstre ne peut pas repasser sur une case qu'il a deja explorï¿½
 			if(p.getMonstreAnciennePosition(x, y) > -1) caseExplorerParMonstre[x][y] = true;
-			//On sauvegarde la nouvelle position si seulement le monstre est plus proche de cette position là que celle sauvegarde
+			//On sauvegarde la nouvelle position si seulement le monstre est plus proche de cette position lï¿½ que celle sauvegarde
 			if(p.getMonstreAnciennePosition(x, y) > -1 && p.getMonstreAnciennePosition(x, y) <= proche) {
 				position = new Position(x,y);
 				proche = p.getMonstreAnciennePosition(x, y);
-			} else proche++; //A chaque tour le monstre s'éloigne
+			} else proche++; //A chaque tour le monstre s'ï¿½loigne
 		}		
 		return new Position(x, y);
 	}
