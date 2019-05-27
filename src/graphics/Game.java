@@ -12,6 +12,7 @@ import game.Plateau;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -226,57 +227,63 @@ public abstract class Game {
 			}
 			if(!Mode_Tp && m.bloquer(plateau) && !plateau.fini()) {
 				victoireChasseur();
-			}
-			/*
-			 * Creation d'une animation pour le deplacement du monstre
-			 */
-			translate = new TranslateTransition();
-			translate.setDuration(Duration.millis(1000));
-			translate.setToX(offsetX + (m.getX() * taille_case));
-			translate.setToY(offsetY + (m.getY() * taille_case));
-			translate.setNode(monstre);
-			translate.play();
-			
-			fade = new FadeTransition();
-			fade.setDuration(Duration.millis(1000));
-			fade.setNode(monstre);
-			fade.setFromValue(1);
-			fade.setToValue(0);
-			fade.play();
-			
-			sec = 5;
-			/*
-			 * Compteur de 5 secondes pour passer à l'autre joueur
-			 */
-			PauseTransition pause = new PauseTransition();
-			pause.setDuration(Duration.millis(1000));
-			pause.setDelay(Duration.ZERO);
-			info.setText("" + sec + " secondes");
-			pause.setOnFinished(e -> {
-				if(sec > 1) {
-					sec--;
-					info.setText("" + sec + " secondes");
-					pause.play();
-				} else if(!fini){
-					c.setJouer(true);
-					info.setText("Au chasseur de jouer");
-					infoBas.setText("");
-					draw();
-					if(retrecitBr) {
-						infoBas.setText("Le plateau se reduit");
+			} else {
+				/*
+				 * Creation d'une animation pour le deplacement du monstre
+				 */
+				translate = new TranslateTransition();
+				translate.setDuration(Duration.millis(1000));
+				translate.setToX(offsetX + (m.getX() * taille_case));
+				translate.setToY(offsetY + (m.getY() * taille_case));
+				translate.setNode(monstre);
+				translate.play();
+				
+				fade = new FadeTransition();
+				fade.setDuration(Duration.millis(1000));
+				fade.setNode(monstre);
+				fade.setFromValue(1);
+				fade.setToValue(0);
+				fade.play();
+				infoBas.setText("");
+				
+				
+				sec = 5;
+				/*
+				 * Compteur de 5 secondes pour passer à l'autre joueur
+				 */
+				PauseTransition pause = new PauseTransition();
+				pause.setDuration(Duration.millis(1000));
+				pause.setDelay(Duration.ZERO);
+				info.setText("" + sec + " secondes");
+				pause.setOnFinished(e -> {
+					if(sec > 1) {
+						sec--;
+						info.setText("" + sec + " secondes");
+						pause.play();
+					} else if(!fini){
+						c.setJouer(true);
+						info.setText("Au chasseur de jouer");
+						draw();
+						if(retrecitBr) {
+							infoBas.setText("Le plateau se reduit");
+						}
+						retrecitBr = false;
 					}
-					retrecitBr = false;
-				}
-			});
-			pause.play();
+				});
+				pause.play();
+			}
+			
 		} else infoBas.setText("Impossible la case est deja exploree");
 	}
 	
 	private boolean ModeBR() {
-		if(tours % 3 == 0 && Mode_BR) {
+		if(tours % 10 == 0 && Mode_BR) {
 			br.rectrecitGraphique();
+			if(!Mode_Tp && m.bloquer(plateau) && !plateau.fini()) {
+				victoireChasseur();
+			}
 			return true;
-		} else if(tours % 3 == 2 && Mode_BR) {
+		} else if(tours % 10 == 9 && Mode_BR) {
 			infoBas.setText("Prochain tour le plateau va se retrecir");
 		}
 		return false;
@@ -324,29 +331,33 @@ public abstract class Game {
 				/*
 				 * Attente du clique sur le canvas de la part du monstre pour pouvoir afficher 
 				 */
-				reset();
-				m.setJouer(true);
-				info.setText("Cliquez pour afficher le monstre");
-				infoBas.setText("");
-				retrecitBr = ModeBR();
-				if(retrecitBr) {
-					infoBas.setText("Le plateau se reduit");
-				}
-				while(Mode_Tp && m.bloquer(plateau) && !plateau.fini()) {
-					plateau.setExplorer(m.getX(), m.getY());
-					Teleport.teleport(plateau, m);
-					draw();
-					infoBas.setText("Le monstre a ete teleporte");
-					translate = new TranslateTransition();
-					translate.setDuration(Duration.millis(1));
-					translate.setToX(offsetX + (m.getX() * taille_case));
-					translate.setToY(offsetY + (m.getY() * taille_case));
-					translate.setNode(monstre);
-					translate.play();
-				}			
-				if(plateau.fini()) {
-					victoireMonstre();
-				} 
+				Platform.runLater(new Runnable() {
+					public void run() {
+						reset();
+						m.setJouer(true);
+						info.setText("Cliquez pour afficher le monstre");
+						infoBas.setText("");
+						retrecitBr = ModeBR();
+						if(retrecitBr) {
+							infoBas.setText("Le plateau se reduit");
+						}
+						while(Mode_Tp && m.bloquer(plateau) && !plateau.fini()) {
+							plateau.setExplorer(m.getX(), m.getY());
+							Teleport.teleport(plateau, m);
+							draw();
+							infoBas.setText("Le monstre a ete teleporte");
+							translate = new TranslateTransition();
+							translate.setDuration(Duration.millis(1));
+							translate.setToX(offsetX + (m.getX() * taille_case));
+							translate.setToY(offsetY + (m.getY() * taille_case));
+							translate.setNode(monstre);
+							translate.play();
+						}	
+						if(plateau.fini()) {
+							victoireMonstre();
+						}
+					}
+				});
 			}
 		});
 		anciennePositionMonstre[x][y] = plateau.getMonstreAnciennePosition(x, y);

@@ -4,6 +4,7 @@ import game.Chasseur;
 import game.Monstre;
 import javafx.animation.TranslateTransition;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 public class DeuxJoueurs extends Game {
@@ -50,6 +51,9 @@ public class DeuxJoueurs extends Game {
 	 				} else if(deltaY == 0 && Math.abs(deltaX) == size - 1) {
 	 					if(deltaX > 0) moveMonstre(-1, 0);
 						else moveMonstre(1, 0);
+	 				} else {
+	 					infoBas.setTextFill(Color.RED);
+	 					infoBas.setText("Case selectionnee impossible");
 	 				}
 				} else if(m.peutJouer()) {
 					monstre.setOpacity(1.0);
