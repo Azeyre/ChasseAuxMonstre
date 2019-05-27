@@ -21,6 +21,7 @@
          <children>
             <Button mnemonicParsing="false" onAction="#apply" text="Ok" />
             <Button mnemonicParsing="false" onAction="#cancel" text="Annuler" />
+            <Button mnemonicParsing="false" onAction="#commands" text="Comment Jouer ?" />
          </children>
          <VBox.margin>
             <Insets bottom="5.0" />
