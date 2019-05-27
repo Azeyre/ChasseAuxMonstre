@@ -37,7 +37,7 @@ Il existe actuellement 3 modes de jeu :
 Tous les 10 tours, le plateau verra sa taille rétrécir d'une case de chaque côté (les cases au bord sont alors inaccessible)
 - ### Mode "Monste TP" :
 Lorsque le monstre n'a plus aucun moyen de se déplacer (Haut, Bas, Gauche, Droite), il est alors téléporté sur une case "libre"
-- ### Mode "Monstre mange Chasseur" :
+- ### Mode "Monstre mange Chasseur" (seulement en mode console):
 Si le chasseur tape sur une case adjacente de celle où se trouve le monstre, alors le monstre peut "manger" le chasseur et la partie se termine (Victoire du monstre)
 
 [Source code](https://github.com/Azeyre/ChasseAuxMonstre)
