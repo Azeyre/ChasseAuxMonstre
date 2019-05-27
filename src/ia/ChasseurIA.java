@@ -4,7 +4,7 @@ import java.util.Random;
 
 import game.Plateau;
 import game.Position;
-import menu.Menu;
+import menu.MenuConsole;
 
 /**
  * Classe de ChasseurIA

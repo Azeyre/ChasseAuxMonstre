@@ -10,7 +10,7 @@ import game.Monstre;
 import game.Plateau;
 import game.Position;
 import ia.ChasseurIA;
-import menu.Menu;
+import menu.MenuConsole;
 import options.BattleRoyale;
 import options.Teleport;
 
@@ -51,7 +51,7 @@ public abstract class SoloMonstre {
 		
 		while(!fin && !monstreGagne) {
 			tours++;
-			if(tours % 10 == 0 && Menu.modeBR) {
+			if(tours % 10 == 0 && MenuConsole.modeBR) {
 				br.retrecit(chasseurIA);
 			}
 			/*
@@ -60,12 +60,12 @@ public abstract class SoloMonstre {
 			clear();
 			JOptionPane.showMessageDialog(null,"Debut du tour nï¿½" + tours,"Monstre",JOptionPane.INFORMATION_MESSAGE);
 			plateau.affichage(monstre, chasseur);			
-			if(Menu.debloquer) {
+			if(MenuConsole.debloquer) {
 				while(monstre.bloquer(plateau) && !plateau.fini()) {
 					plateau.setExplorer(monstre.getX(), monstre.getY());
 					Teleport.teleport(plateau, monstre);
 					plateau.affichage(monstre, chasseur);
-					System.out.println("Bloqué ! TP en cours...");
+					System.out.println("Bloquï¿½ ! TP en cours...");
 					avertir = true;
 				}
 			}
@@ -98,13 +98,13 @@ public abstract class SoloMonstre {
 			plateau.affichage(monstre, chasseur);
 			JOptionPane.showMessageDialog(null,"Fin du tour","Monstre",JOptionPane.INFORMATION_MESSAGE);
 			scoreMonstre++;
-			if(Menu.monstreMange) {
+			if(MenuConsole.monstreMange) {
 				if(monstre.getPosition().equals(chasseur)) {
 					System.out.println("Monstre mange le chasseur");
 					monstreGagne = true;
 				}
 			}
-			if(!Menu.debloquer && monstre.bloquer(plateau)) fin = true; 
+			if(!MenuConsole.debloquer && monstre.bloquer(plateau)) fin = true; 
 			/*
 			 * FIN DU TOUR POUR LE MONSTRE
 			 */
@@ -122,12 +122,12 @@ public abstract class SoloMonstre {
 			 */
 			monstreGagne = plateau.fini();
 		}
-		Menu.saveScore(scoreMonstre, 'M');
+		MenuConsole.saveScore(scoreMonstre, 'M');
 		System.out.println("Fini!");
-		if(monstreGagne) System.out.println("Le monstre a gagné !");
-		else System.out.println("Le chasseur a gagné !");
+		if(monstreGagne) System.out.println("Le monstre a gagnï¿½ !");
+		else System.out.println("Le chasseur a gagnï¿½ !");
 		
-		Menu.main(null);
+		MenuConsole.main(null);
 	}
 	private static void clear() {
 		for(int i = 0 ; i < 100 ; i++) System.out.println();

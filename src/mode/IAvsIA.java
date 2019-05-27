@@ -6,17 +6,17 @@ import game.Plateau;
 import game.Position;
 import ia.ChasseurIA;
 import ia.MonstreIA;
-import menu.Menu;
+import menu.MenuConsole;
 import options.BattleRoyale;
 import options.Teleport;
 
 public class IAvsIA {
 	
 	public static void main(String[] args) {
-		Menu.SIZE = 10;
-		Menu.debloquer = true;
-		Menu.modeBR = true;
-		Menu.monstreMange = true;
+		MenuConsole.SIZE = 10;
+		MenuConsole.debloquer = true;
+		MenuConsole.modeBR = true;
+		MenuConsole.monstreMange = true;
 		start();
 	}
 	
@@ -51,13 +51,13 @@ public class IAvsIA {
 
 			while (!fin && !monstreGagne) {
 				tours++;
-				if(tours % 10 == 0 && Menu.modeBR) {
+				if(tours % 10 == 0 && MenuConsole.modeBR) {
 					br.retrecit(chasseuria);
 				}
 				/*
 				 * DEBUT TOUR POUR LE MONSTRE
 				 */
-				if(Menu.debloquer) {
+				if(MenuConsole.debloquer) {
 					while(monstre.bloquer(plateau) && !plateau.fini()) {
 						plateau.setExplorer(monstre.getX(), monstre.getY());
 						Teleport.teleport(plateau, monstre);
@@ -83,16 +83,16 @@ public class IAvsIA {
 					}
 				} while (!monstre.move(x, y, plateau) && !monstre.bloquer(plateau));
 				plateau.incrPos(monstre);
-				if(Menu.monstreMange) {
+				if(MenuConsole.monstreMange) {
 					if(monstre.getPosition().equals(chasseur)) {
 						System.out.println("Monstre mange le chasseur");
 						monstreGagne = true;
 					}
 				}
-				if(!Menu.debloquer && monstre.bloquer(plateau)) {
+				if(!MenuConsole.debloquer && monstre.bloquer(plateau)) {
 					monstreBloquer++;
 					fin = true; 
-				} else if(Menu.debloquer && plateau.fini()) monstreGagne = true;
+				} else if(MenuConsole.debloquer && plateau.fini()) monstreGagne = true;
 				/*
 				 * FIN DU TOUR POUR LE MONSTRE
 				 */

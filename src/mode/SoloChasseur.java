@@ -8,7 +8,7 @@ import game.Chasseur;
 import game.Monstre;
 import game.Plateau;
 import ia.MonstreIA;
-import menu.Menu;
+import menu.MenuConsole;
 import options.BattleRoyale;
 import options.Teleport;
 
@@ -55,18 +55,18 @@ public abstract class SoloChasseur {
 		//Boucle principale, tant que le chasseur n'a pas trouvï¿½ le monstre ou que le monstre n'est plus de case a explorï¿½
 		while (!fin && !monstreGagne) {
 			tours++;
-			if(tours % 10 == 0 && Menu.modeBR) {
+			if(tours % 10 == 0 && MenuConsole.modeBR) {
 				br.retrecit();
 			}
 			/*
 			 * DEBUT TOUR POUR LE MONSTRE
 			 */
 			clear();
-			if(Menu.debloquer) {
+			if(MenuConsole.debloquer) {
 				while(monstre.bloquer(plateau) && !plateau.fini()) {
 					plateau.setExplorer(monstre.getX(), monstre.getY());
 					Teleport.teleport(plateau, monstre);
-					System.out.println("Bloqué ! TP en cours...");
+					System.out.println("Bloquï¿½ ! TP en cours...");
 					avertir = true;
 				}
 			}
@@ -91,13 +91,13 @@ public abstract class SoloChasseur {
 				}
 			} while (!monstre.move(x, y, plateau) && !monstre.bloquer(plateau));
 			plateau.incrPos(monstre);
-			if(Menu.monstreMange) {
+			if(MenuConsole.monstreMange) {
 				if(monstre.getPosition().equals(chasseur)) {
 					System.out.println("Monstre mange le chasseur");
 					monstreGagne = true;
 				}
 			}
-			if(!Menu.debloquer && monstre.bloquer(plateau)) fin = true; 
+			if(!MenuConsole.debloquer && monstre.bloquer(plateau)) fin = true; 
 			/*
 			 * FIN DU TOUR POUR LE MONSTRE
 			 */
@@ -110,9 +110,9 @@ public abstract class SoloChasseur {
 				 * DEBUT TOUR POUR LE CHASSEUR
 				 */
 				clear();
-				JOptionPane.showMessageDialog(null,"Debut du tour n°" + tours,"Chasseur",JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null,"Debut du tour nï¿½" + tours,"Chasseur",JOptionPane.INFORMATION_MESSAGE);
 				if(avertir) {
-					JOptionPane.showMessageDialog(null,"Le monstre s'est bloqué, il s'est téléporté aléatoirement.","Chasseur",JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null,"Le monstre s'est bloquï¿½, il s'est tï¿½lï¿½portï¿½ alï¿½atoirement.","Chasseur",JOptionPane.INFORMATION_MESSAGE);
 					avertir = false;
 				}
 				plateau.affichage(chasseur, null);
@@ -120,7 +120,7 @@ public abstract class SoloChasseur {
 					/*
 					 * Fenetre demandant au chasseur de reveler la case de son choix
 					 */
-					entreChasseur = (String) JOptionPane.showInputDialog(null, "Sélection de la case (ex. A6 ou 6A)", "Chasseur", JOptionPane.QUESTION_MESSAGE,null, null,"");
+					entreChasseur = (String) JOptionPane.showInputDialog(null, "Sï¿½lection de la case (ex. A6 ou 6A)", "Chasseur", JOptionPane.QUESTION_MESSAGE,null, null,"");
 					revealX = stringToX(entreChasseur);
 					revealY = stringToY(entreChasseur);
 				} while(revealX == -1 || revealY == -1);
@@ -138,12 +138,12 @@ public abstract class SoloChasseur {
 			 * FIN DU TOUR POUR LE CHASSEUR
 			 */
 		}
-		Menu.saveScore(scoreChasseur, 'C');
+		MenuConsole.saveScore(scoreChasseur, 'C');
 		System.out.println("Fini!");
-		if(monstreGagne) System.out.println("Le monstre a gagné !");
-		else System.out.println("Le chasseur a gagné !");
+		if(monstreGagne) System.out.println("Le monstre a gagnï¿½ !");
+		else System.out.println("Le chasseur a gagnï¿½ !");
 		
-		Menu.main(null);
+		MenuConsole.main(null);
 	}
 
 	/**
@@ -155,8 +155,8 @@ public abstract class SoloChasseur {
 		if(s == null || s.length() != 2) {
 			return -1;
 		}
-		if(s.charAt(0) >= '0' && s.charAt(0) <= '0' + Menu.SIZE - 1) return Character.getNumericValue(s.charAt(0));
-		if(s.charAt(1) >= '0' && s.charAt(1) <= '0' + Menu.SIZE - 1) return Character.getNumericValue(s.charAt(1));
+		if(s.charAt(0) >= '0' && s.charAt(0) <= '0' + MenuConsole.SIZE - 1) return Character.getNumericValue(s.charAt(0));
+		if(s.charAt(1) >= '0' && s.charAt(1) <= '0' + MenuConsole.SIZE - 1) return Character.getNumericValue(s.charAt(1));
 		return -1;
 	}
 	
@@ -169,10 +169,10 @@ public abstract class SoloChasseur {
 		if(s== null || s.length() != 2) {
 			return -1;
 		}
-		if(s.charAt(0) >= 'A' && s.charAt(0) <= ('A' + (Menu.SIZE-1))) return (int)(s.charAt(0) - 'A');
-		if(s.charAt(1) >= 'A' && s.charAt(1) <= ('A' + (Menu.SIZE-1))) return (int)(s.charAt(1) - 'A');
-		if(s.charAt(0) >= 'a' && s.charAt(0) <= ('a' + (Menu.SIZE-1))) return (int)(s.charAt(0) - 'a');
-		if(s.charAt(1) >= 'a' && s.charAt(1) <= ('a' + (Menu.SIZE-1))) return (int)(s.charAt(1) - 'a');
+		if(s.charAt(0) >= 'A' && s.charAt(0) <= ('A' + (MenuConsole.SIZE-1))) return (int)(s.charAt(0) - 'A');
+		if(s.charAt(1) >= 'A' && s.charAt(1) <= ('A' + (MenuConsole.SIZE-1))) return (int)(s.charAt(1) - 'A');
+		if(s.charAt(0) >= 'a' && s.charAt(0) <= ('a' + (MenuConsole.SIZE-1))) return (int)(s.charAt(0) - 'a');
+		if(s.charAt(1) >= 'a' && s.charAt(1) <= ('a' + (MenuConsole.SIZE-1))) return (int)(s.charAt(1) - 'a');
 		return -1;
 	}
 	

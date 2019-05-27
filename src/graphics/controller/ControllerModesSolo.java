@@ -5,6 +5,7 @@ import graphics.IAvsIA;
 import graphics.Joueur;
 import graphics.Menu;
 import graphics.MenuOptions;
+import graphics.UnJoueurChasseur;
 import graphics.UnJoueurMonstre;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -31,6 +32,8 @@ public class ControllerModesSolo {
 			IAvsIA ia = new IAvsIA(Integer.valueOf(comboSize.getSelectionModel().getSelectedItem().toString()));
 		} else if(j1.estMonstre()) {
 			UnJoueurMonstre uj = new UnJoueurMonstre(j1, Integer.valueOf(comboSize.getSelectionModel().getSelectedItem().toString()));
+		} else {
+			UnJoueurChasseur chasse = new UnJoueurChasseur(j1, Integer.valueOf(comboSize.getSelectionModel().getSelectedItem().toString()));
 		}
 		Stage stage  = (Stage) buttonTp.getScene().getWindow();
 		stage.close();

@@ -1,6 +1,6 @@
 package game;
 
-import menu.Menu;
+import menu.MenuConsole;
 
 /**
  * Classe du Plateau
@@ -24,7 +24,7 @@ public class Plateau {
 	 * @param size - Taille du plateau
 	 */
 	public Plateau() {
-		this.size = Menu.SIZE;
+		this.size = MenuConsole.SIZE;
 		this.plateau = new char[size][size];
 		this.monstreAnciennePosition = new int[size][size];
 		this.caseExplorer = new boolean[size][size];

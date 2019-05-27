@@ -6,14 +6,14 @@ import org.junit.jupiter.api.Test;
 
 import game.Monstre;
 import game.Plateau;
-import menu.Menu;
+import menu.MenuConsole;
 
 class TestPlateau {
 	Plateau p;
 	Monstre m;
 	@Test
 	void testGetMonstreAnciennePosition() {
-		Menu.SIZE = 5;
+		MenuConsole.SIZE = 5;
 		p = new Plateau();
 		m = new Monstre();
 		
@@ -32,7 +32,7 @@ class TestPlateau {
 	
 	@Test
 	void testReveal() {
-		Menu.SIZE = 5;
+		MenuConsole.SIZE = 5;
 		p = new Plateau();
 		m = new Monstre();
 		m.setPosition(0, 0);
@@ -43,7 +43,7 @@ class TestPlateau {
 	
 	@Test
 	void testCaseExplorer() {
-		Menu.SIZE = 5;
+		MenuConsole.SIZE = 5;
 		p = new Plateau();
 		m = new Monstre();
 		m.setPosition(0, 0);

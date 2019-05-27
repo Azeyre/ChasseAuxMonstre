@@ -2,7 +2,7 @@ package options;
 
 import game.Monstre;
 import game.Plateau;
-import menu.Menu;
+import menu.MenuConsole;
 
 public class Teleport {
 	

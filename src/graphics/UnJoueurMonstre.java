@@ -90,6 +90,7 @@ public class UnJoueurMonstre extends Game {
 	@Override
 	protected void moveMonstre(int x, int y) {
 		if(m.move(x, y, plateau)) {
+			loupAudio();
 			tours++;
 			plateau.incrPos(m);
 			m.setJouer(false);
@@ -105,6 +106,7 @@ public class UnJoueurMonstre extends Game {
 				/*
 				 * Creation d'une animation pour le deplacement du monstre
 				 */
+				loupMediaPlayer.stop();
 				translate = new TranslateTransition();
 				translate.setDuration(Duration.millis(1000));
 				translate.setToX(offsetX + (m.getX() * taille_case));
@@ -138,6 +140,7 @@ public class UnJoueurMonstre extends Game {
 	
 	@Override
 	protected boolean reveal(int x, int y) {
+		tirAudio();
 		int anciennePosition = plateau.getMonstreAnciennePosition(x, y);
 		if(anciennePosition != -1) {
 			infoBas.setText("Le monstre est passe par la il y a " + anciennePosition + " tours");
@@ -150,6 +153,7 @@ public class UnJoueurMonstre extends Game {
 		/*
 		 * Compteur de 5 secondes pour passer à l'autre joueur
 		 */
+		tirMediaPlayer.stop();
 		Platform.runLater(new Runnable() {
 			public void run() {
 				if(!fini) {

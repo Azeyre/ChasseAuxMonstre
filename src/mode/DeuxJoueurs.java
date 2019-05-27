@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
 import game.Chasseur;
 import game.Monstre;
 import game.Plateau;
-import menu.Menu;
+import menu.MenuConsole;
 import options.BattleRoyale;
 import options.Teleport;
 
@@ -20,21 +20,21 @@ import options.Teleport;
 public abstract class DeuxJoueurs {
 
 	/**
-	 * Boucle principale du jeu, à 2 joueurs en LOCAL <br>
-	 * Initialisation variable : - Plateau à une taille
-	 * donné SIZE <br>
+	 * Boucle principale du jeu, ï¿½ 2 joueurs en LOCAL <br>
+	 * Initialisation variable : - Plateau ï¿½ une taille
+	 * donnï¿½ SIZE <br>
 	 *  - Instance de Monstre et Chasseur
 	 * <br>
 	 * <br>
 	 * Actions faites par tour : - Affichage du plateau pour le monstre <br> - Demande au
-	 * monstre son déplacement <br> - Déplacement du monstre en fonction du choix <br>-
-	 * Incrémentation des anciens déplacements <br> - Affichage du plateau pour le
-	 * chasseur <br> - Choix du chasseur pour revéler la case <br> - Revele la case choisit
+	 * monstre son dï¿½placement <br> - Dï¿½placement du monstre en fonction du choix <br>-
+	 * Incrï¿½mentation des anciens dï¿½placements <br> - Affichage du plateau pour le
+	 * chasseur <br> - Choix du chasseur pour revï¿½ler la case <br> - Revele la case choisit
 	 * par le chasseur
 	 * <br>
 	 * <br>
 	 * Boucle se termine lorsque le chasseur trouve le monstre ou lorsque toutes les
-	 * case ont été joué par le monstre
+	 * case ont ï¿½tï¿½ jouï¿½ par le monstre
 	 * @param args - rien
 	 */
 	
@@ -58,37 +58,37 @@ public abstract class DeuxJoueurs {
 		
 		plateau.incrPos(monstre);
 		String entreChasseur;
-		//Boucle principale, tant que le chasseur n'a pas trouvé le monstre ou que le monstre n'est plus de case a exploré
+		//Boucle principale, tant que le chasseur n'a pas trouvï¿½ le monstre ou que le monstre n'est plus de case a explorï¿½
 		while (!fin && !monstreGagne) {
 			System.out.println("Nouveau tour");
 			tours++;
-			if(tours % 10 == 0 && Menu.modeBR) {
+			if(tours % 10 == 0 && MenuConsole.modeBR) {
 				br.retrecit();
 			}
 			/*
 			 * DEBUT TOUR POUR LE MONSTRE
 			 */
 			clear();
-			JOptionPane.showMessageDialog(null,"Debut du tour n°" + tours,"Monstre",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null,"Debut du tour nï¿½" + tours,"Monstre",JOptionPane.INFORMATION_MESSAGE);
 			plateau.affichage(monstre, chasseur);
-			if(Menu.debloquer) {
+			if(MenuConsole.debloquer) {
 				while(monstre.bloquer(plateau) && !plateau.fini()) {
 					plateau.setExplorer(monstre.getX(), monstre.getY());
 					Teleport.teleport(plateau, monstre);
 					plateau.affichage(monstre, chasseur);
-					System.out.println("Bloqué ! TP en cours...");
+					System.out.println("Bloquï¿½ ! TP en cours...");
 					avertir = true;
 				}
 			}
 			do {
 				/*
-				 * Fenetre demandant au joueur de faire le déplacement du monstre selon 4 choix possibles : Gauche, Droite, Haut, Bas
+				 * Fenetre demandant au joueur de faire le dï¿½placement du monstre selon 4 choix possibles : Gauche, Droite, Haut, Bas
 				 */
 				n = JOptionPane.showOptionDialog(null, "Selection du mouvement (fermer = BAS)", "Monstre",
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 				
 				/*
-				 * X, Y prennent des valeurs selon le choix du déplacement du joueur
+				 * X, Y prennent des valeurs selon le choix du dï¿½placement du joueur
 				 */
 				if (n == 0) {
 					x = 0;
@@ -109,13 +109,13 @@ public abstract class DeuxJoueurs {
 			plateau.affichage(monstre, chasseur);
 			JOptionPane.showMessageDialog(null,"Fin du tour","Monstre",JOptionPane.INFORMATION_MESSAGE);
 			scoreMonstre++;
-			if(Menu.monstreMange) {
+			if(MenuConsole.monstreMange) {
 				if(monstre.getPosition().equals(chasseur)) {
 					System.out.println("Monstre mange le chasseur");
 					monstreGagne = true;
 				}
 			}
-			if(!Menu.debloquer && monstre.bloquer(plateau)) fin = true; 
+			if(!MenuConsole.debloquer && monstre.bloquer(plateau)) fin = true; 
 			/*
 			 * FIN DU TOUR POUR LE MONSTRE
 			 */
@@ -125,9 +125,9 @@ public abstract class DeuxJoueurs {
 				 * DEBUT TOUR POUR LE CHASSEUR
 				 */
 				clear();
-				JOptionPane.showMessageDialog(null,"Debut du tour n°" + tours,"Chasseur",JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null,"Debut du tour nï¿½" + tours,"Chasseur",JOptionPane.INFORMATION_MESSAGE);
 				if(avertir) {
-					JOptionPane.showMessageDialog(null,"Le monstre s'est bloqué, il s'est téléporté aléatoirement.","Chasseur",JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null,"Le monstre s'est bloquï¿½, il s'est tï¿½lï¿½portï¿½ alï¿½atoirement.","Chasseur",JOptionPane.INFORMATION_MESSAGE);
 					avertir = false;
 				}
 				plateau.affichage(chasseur, null);
@@ -135,7 +135,7 @@ public abstract class DeuxJoueurs {
 					/*
 					 * Fenetre demandant au chasseur de reveler la case de son choix
 					 */
-					entreChasseur = (String) JOptionPane.showInputDialog(null, "Sélection de la case (ex. A6 ou 6A)", "Chasseur", JOptionPane.QUESTION_MESSAGE,null, null,"");
+					entreChasseur = (String) JOptionPane.showInputDialog(null, "Sï¿½lection de la case (ex. A6 ou 6A)", "Chasseur", JOptionPane.QUESTION_MESSAGE,null, null,"");
 					revealX = stringToX(entreChasseur);
 					revealY = stringToY(entreChasseur);
 				} while(revealX == -1 || revealY == -1);
@@ -151,41 +151,41 @@ public abstract class DeuxJoueurs {
 				monstreGagne = plateau.fini();
 			}
 		}
-		Menu.saveScore(scoreMonstre, scoreChasseur);
+		MenuConsole.saveScore(scoreMonstre, scoreChasseur);
 		System.out.println("Fini!");
-		if(monstreGagne) System.out.println("Le monstre a gagné !");
-		else System.out.println("Le chasseur a gagné !");
+		if(monstreGagne) System.out.println("Le monstre a gagnï¿½ !");
+		else System.out.println("Le chasseur a gagnï¿½ !");
 		
-		Menu.main(null);
+		MenuConsole.main(null);
 	}
 
 	/**
-	 * Transforme le 'A6' en coordonné X
-	 * @param s : String écrit par le chasseur
+	 * Transforme le 'A6' en coordonnï¿½ X
+	 * @param s : String ï¿½crit par le chasseur
 	 * @return [0;(SIZE-1)] <b>int</b>
 	 */
 	private static int stringToX(String s) {
 		if(s == null || s.length() != 2) {
 			return -1;
 		}
-		if(s.charAt(0) >= '0' && s.charAt(0) <= '0' + Menu.SIZE - 1) return Character.getNumericValue(s.charAt(0));
-		if(s.charAt(1) >= '0' && s.charAt(1) <= '0' + Menu.SIZE - 1) return Character.getNumericValue(s.charAt(1));
+		if(s.charAt(0) >= '0' && s.charAt(0) <= '0' + MenuConsole.SIZE - 1) return Character.getNumericValue(s.charAt(0));
+		if(s.charAt(1) >= '0' && s.charAt(1) <= '0' + MenuConsole.SIZE - 1) return Character.getNumericValue(s.charAt(1));
 		return -1;
 	}
 	
 	/**
-	 * Transforme le 'A6' en coordonné Y
-	 * @param y : String écrit par le chasseur
+	 * Transforme le 'A6' en coordonnï¿½ Y
+	 * @param y : String ï¿½crit par le chasseur
 	 * @return [0;(SIZE-1)] <b>int</b>
 	 */
 	private static int stringToY(String s) {
 		if(s== null || s.length() != 2) {
 			return -1;
 		}
-		if(s.charAt(0) >= 'A' && s.charAt(0) <= ('A' + (Menu.SIZE-1))) return (int)(s.charAt(0) - 'A');
-		if(s.charAt(1) >= 'A' && s.charAt(1) <= ('A' + (Menu.SIZE-1))) return (int)(s.charAt(1) - 'A');
-		if(s.charAt(0) >= 'a' && s.charAt(0) <= ('a' + (Menu.SIZE-1))) return (int)(s.charAt(0) - 'a');
-		if(s.charAt(1) >= 'a' && s.charAt(1) <= ('a' + (Menu.SIZE-1))) return (int)(s.charAt(1) - 'a');
+		if(s.charAt(0) >= 'A' && s.charAt(0) <= ('A' + (MenuConsole.SIZE-1))) return (int)(s.charAt(0) - 'A');
+		if(s.charAt(1) >= 'A' && s.charAt(1) <= ('A' + (MenuConsole.SIZE-1))) return (int)(s.charAt(1) - 'A');
+		if(s.charAt(0) >= 'a' && s.charAt(0) <= ('a' + (MenuConsole.SIZE-1))) return (int)(s.charAt(0) - 'a');
+		if(s.charAt(1) >= 'a' && s.charAt(1) <= ('a' + (MenuConsole.SIZE-1))) return (int)(s.charAt(1) - 'a');
 		return -1;
 	}
 	

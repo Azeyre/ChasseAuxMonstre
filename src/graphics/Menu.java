@@ -50,7 +50,7 @@ public class Menu extends Application {
 	private static MediaPlayer mp;
 	private static ImageView speaker_on, speaker_off;
 	private static boolean mute = false;
-	private static double volume = 0.0;
+	private static double volume = 1.0;
 	private static Joueur j1, j2;
 	
 	private ImageView chasseur, monstre, back;
@@ -62,7 +62,6 @@ public class Menu extends Application {
 	private Font titre, sub;
 	private Canvas canvas;
 	private GraphicsContext gc;
-	private DeuxJoueurs dj;
 	private static Stage menu;
 	
 	public void start(Stage stage) throws IOException {

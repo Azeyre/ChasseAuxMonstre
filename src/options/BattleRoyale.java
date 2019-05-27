@@ -2,7 +2,7 @@ package options;
 
 import game.Plateau;
 import ia.ChasseurIA;
-import menu.Menu;
+import menu.MenuConsole;
 
 public class BattleRoyale {	
 		

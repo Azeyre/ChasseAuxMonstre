@@ -3,6 +3,7 @@ package graphics;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import game.Chasseur;
 import game.Monstre;
@@ -66,6 +67,7 @@ public abstract class Game {
 	public static boolean Mode_BR = false, Mode_Tp = false, Mode_MonstreMange = false;
 	protected BattleRoyale br;
 	protected boolean retrecitBr = false;
+	protected MediaPlayer loupMediaPlayer, tirMediaPlayer;
 	
 	/**
 	 * Permet de créer une fenetre de jeu avec un titre passé en paramètre
@@ -162,20 +164,22 @@ public abstract class Game {
 			MenuQuit.open();
 		});
 		stage.show();
+		
+		Media loupMedia = new Media(new File("ressources/audio/loup.wav").toURI().toString());
+		loupMediaPlayer = new MediaPlayer(loupMedia);
+		loupMediaPlayer.setVolume(0.2);
+		
+		Media tirMedia = new Media(new File("ressources/audio/shoot.m4a").toURI().toString());
+		tirMediaPlayer = new MediaPlayer(tirMedia);
+		tirMediaPlayer.setVolume(0.05);
 	}
 	
 	protected void tirAudio() {
-		Media me = new Media(new File("ressources/audio/shoot.m4a").toURI().toString());
-		MediaPlayer mp = new MediaPlayer(me);
-		mp.setVolume(0.5);
-		mp.play();
+		tirMediaPlayer.play();
 	}
 	
 	protected void loupAudio() {
-		Media me = new Media(new File("ressources/audio/loup.m4a").toURI().toString());
-		MediaPlayer mp = new MediaPlayer(me);
-		mp.setVolume(0.5);
-		mp.play();
+		loupMediaPlayer.play();
 	}
 	
 	/*

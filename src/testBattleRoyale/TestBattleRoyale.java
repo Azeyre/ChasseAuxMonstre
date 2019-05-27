@@ -3,14 +3,14 @@ package testBattleRoyale;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import game.Plateau;
-import menu.Menu;
+import menu.MenuConsole;
 import options.BattleRoyale;
 
 public class TestBattleRoyale {
 	
 	@Test
 	void testRetrecit() {
-		Menu.SIZE = 5;
+		MenuConsole.SIZE = 5;
 		Plateau p = new Plateau();
 		BattleRoyale br = new BattleRoyale(p);
 		

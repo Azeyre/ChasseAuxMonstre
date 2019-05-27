@@ -102,6 +102,7 @@ public class DeuxJoueurs extends Game {
 		 * Deplacement du monstre sur le plateau
 		 */
 		if(m.move(x, y, plateau)) {
+			loupAudio();
 			tours++;
 			plateau.incrPos(m);
 			m.setJouer(false);
@@ -147,6 +148,7 @@ public class DeuxJoueurs extends Game {
 						info.setText("" + sec + " secondes");
 						pause.play();
 					} else if(!fini){
+						loupMediaPlayer.stop();
 						c.setJouer(true);
 						info.setText("Au chasseur de jouer");
 						draw();
@@ -166,6 +168,7 @@ public class DeuxJoueurs extends Game {
 		/*
 		 * Recuperation de l'ancienne position du chasseur pour pouvoir l'afficher au monstre
 		 */
+		tirAudio();
 		int anciennePosition = plateau.getMonstreAnciennePosition(x, y);
 		if(anciennePosition != -1) {
 			infoBas.setText("Le monstre est passe par la il y a " + anciennePosition + " tours");
@@ -198,6 +201,7 @@ public class DeuxJoueurs extends Game {
 				/*
 				 * Attente du clique sur le canvas de la part du monstre pour pouvoir afficher 
 				 */
+				tirMediaPlayer.stop();
 				Platform.runLater(new Runnable() {
 					public void run() {
 						reset();

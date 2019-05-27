@@ -1,7 +1,7 @@
 package game;
 
 import graphics.Joueur;
-import menu.Menu;
+import menu.MenuConsole;
 
 /**
  * Classe de Monstre
@@ -20,7 +20,7 @@ public class Monstre extends Joueur {
 	 */
 	public Monstre() {
 		super("");
-		this.size = Menu.SIZE;
+		this.size = MenuConsole.SIZE;
 		this.p = new Position((int) (Math.random() * (size)), (int) (Math.random() * (size)));
 	}
 	
@@ -98,7 +98,7 @@ public class Monstre extends Joueur {
 		if(yTemp >= size) yTemp = 0;
 		
 		if(p.getCaseExplorer(xTemp, yTemp)) {
-			System.out.println("Case déjà explorée !");
+			System.out.println("Case dï¿½jï¿½ explorï¿½e !");
 			return false;
 		}
 		this.setPosition(xTemp, yTemp);

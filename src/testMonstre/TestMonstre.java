@@ -6,13 +6,13 @@ import org.junit.jupiter.api.Test;
 
 import game.Monstre;
 import game.Plateau;
-import menu.Menu;
+import menu.MenuConsole;
 
 class TestMonstre {
 
 	@Test
 	void testMove() {
-		Menu.SIZE = 5;
+		MenuConsole.SIZE = 5;
 		Plateau p = new Plateau();
 		Monstre m = new Monstre();
 		
@@ -27,7 +27,7 @@ class TestMonstre {
 	
 	@Test
 	void testBloquer() {
-		Menu.SIZE = 5;
+		MenuConsole.SIZE = 5;
 		Plateau p = new Plateau();
 		Monstre m = new Monstre();
 		
