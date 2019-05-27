@@ -64,7 +64,7 @@ public abstract class Game {
 	protected boolean fini;
 	protected int sec;
 	protected int[][] anciennePositionMonstre;
-	public static boolean Mode_BR = false, Mode_Tp = false, Mode_MonstreMange = false;
+	public static boolean Mode_BR = false, Mode_Tp = false;
 	protected BattleRoyale br;
 	protected boolean retrecitBr = false;
 	protected MediaPlayer loupMediaPlayer, tirMediaPlayer;

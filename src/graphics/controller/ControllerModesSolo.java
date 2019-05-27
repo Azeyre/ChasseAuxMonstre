@@ -16,7 +16,6 @@ public class ControllerModesSolo {
 	
 	@FXML CheckBox buttonTp;
 	@FXML CheckBox buttonBr;
-	@FXML CheckBox buttonMonstreMange;
 	@FXML ComboBox<String> comboSize;
 	public void initialize() {
 		comboSize.getItems().addAll("4","5","6","7","8","9","10");
@@ -26,7 +25,6 @@ public class ControllerModesSolo {
 	public void apply() {
 		Game.Mode_BR = buttonTp.isSelected();
 		Game.Mode_Tp = buttonBr.isSelected();
-		Game.Mode_MonstreMange = buttonMonstreMange.isSelected();
 		Joueur j1 = Menu.getJoueur(1);
 		if(j1 == null) {
 			IAvsIA ia = new IAvsIA(Integer.valueOf(comboSize.getSelectionModel().getSelectedItem().toString()));
